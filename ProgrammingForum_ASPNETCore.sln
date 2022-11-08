@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProgrammingForum_ASPNETCore", "ProgrammingForum_ASPNETCore\ProgrammingForum_ASPNETCore.csproj", "{B1B882FC-DD57-4A79-B0D0-BECA263E22EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{D2DB5D71-7192-4F5D-898A-AE7EBAFCCD94}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1B882FC-DD57-4A79-B0D0-BECA263E22EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1B882FC-DD57-4A79-B0D0-BECA263E22EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1B882FC-DD57-4A79-B0D0-BECA263E22EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1B882FC-DD57-4A79-B0D0-BECA263E22EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2DB5D71-7192-4F5D-898A-AE7EBAFCCD94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2DB5D71-7192-4F5D-898A-AE7EBAFCCD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2DB5D71-7192-4F5D-898A-AE7EBAFCCD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2DB5D71-7192-4F5D-898A-AE7EBAFCCD94}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6AC23AD2-48A8-4F87-9567-8D816744F148}
+	EndGlobalSection
+EndGlobal
