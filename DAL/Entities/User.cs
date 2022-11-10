@@ -8,10 +8,10 @@ namespace DAL.Entities
 {
     public class User
     {
-        //public int Id { get; set; }
         public string UserName { get; set; }
         public byte[]? Picture { get; set; }
         public string HashedPassword { get; set; }
+        public byte[] PasswordSalt { get; set; }
         public string Email { get; set; }
         public DateTime RegisteredDate { get; set; }
         public int Score { get; set; }
