@@ -1,5 +1,4 @@
 using DAL;
-using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
