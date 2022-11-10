@@ -66,16 +66,16 @@ namespace DAL
                 b.HasOne(e => e.Topic)
                     .WithMany(e => e.Posts)
                     .HasForeignKey(p => p.TopicId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<User>(b =>
             {
-                b.HasKey(u => u.Id);
+                b.HasKey(u => u.UserName);
 
-                b.Property(u => u.UserName).HasMaxLength(30).IsRequired();
-                //b.Property(u => u.HashedPassword).IsRequired();
-                //b.Property(u => u.Email).IsRequired();
+                b.Property(u => u.UserName).HasMaxLength(30);
+                b.Property(u => u.HashedPassword).IsRequired();
+                b.Property(u => u.Email).IsRequired();
             });
 
             modelBuilder.Entity<Like>(b =>

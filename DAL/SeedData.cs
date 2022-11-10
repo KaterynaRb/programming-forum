@@ -11,8 +11,8 @@ namespace DAL
             using (var context = new AppDbContext(serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>()))
             {
                 context.Database.EnsureCreated();
-                context.Users.Add(new Entities.User {UserName = "Name" });
-                context.SaveChanges();
+                //context.Users.Add(new Entities.User {UserName = "Name", Email = "email@email", HashedPassword = "abc" });
+                //context.SaveChanges();
             }
         }
     }

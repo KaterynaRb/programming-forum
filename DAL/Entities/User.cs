@@ -8,14 +8,14 @@ namespace DAL.Entities
 {
     public class User
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string UserName { get; set; }
-        public byte[] Picture { get; set; }
+        public byte[]? Picture { get; set; }
         public string HashedPassword { get; set; }
         public string Email { get; set; }
         public DateTime RegisteredDate { get; set; }
         public int Score { get; set; }
-        public string Role { get; set; }
+        public string? Role { get; set; }
         public virtual IEnumerable<PostReply> PostReplies { get; set; }
         public virtual IEnumerable<Post> Posts { get; set; }
         public virtual IEnumerable<Like> Likes { get; set; }

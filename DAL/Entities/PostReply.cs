@@ -14,12 +14,12 @@ namespace DAL.Entities
         public int LikesCount { get; set; }
         public int DislikesCount { get; set; }
         public User Author { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public Post Post { get; set; }
         public int PostId { get; set; }
-        public PostReply ParentReply { get; set; }
+        public PostReply? ParentReply { get; set; }
         public int? ParentReplyId { get; set; }
-        public IEnumerable<PostReply> Replies { get; set; }
+        public IEnumerable<PostReply>? Replies { get; set; }
         public IEnumerable<Like> Likes { get; set; }
         public IEnumerable<Dislike> Dislikes { get; set; }
     }

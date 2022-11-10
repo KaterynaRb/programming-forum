@@ -10,10 +10,10 @@ namespace DAL.Entities
     {
         public User User { get; set; }
         public Post Post { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int PostId { get; set; }
         public DateTime Date { get; set; }
-        public PostReply PostReply { get; set; }
+        public PostReply? PostReply { get; set; }
         public int? PostReplyId { get; set; } 
     }
 }

@@ -1,0 +1,17 @@
+﻿@{
+    var returnUrl = Context.Request.Query["ReturnUrl"];
+}
+
+<h3>Login</h3>
+<hr />
+
+@if (!string.IsNullOrEmpty(TempData["Error"] as string))
+{
+    <p>@TempData["Error"]</p>
+}
+
+<form asp-route-returnurl = "@returnUrl", method="post">
+    <input type="text" name="userName" placeholder="Username" />
+    <input type="password" name="password" placeholder="Password" />
+    <input type="submit" />
+</form>

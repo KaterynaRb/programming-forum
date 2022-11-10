@@ -1,0 +1,60 @@
+﻿@model ProgrammingForum_ASPNETCore.Models.UserCreateModel
+
+<h3>Register</h3>
+<hr />
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <label>Username</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Confirm Email</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.ConfirmEmail, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label> Create password </label>
+            <div class="col-md-4">
+                @Html.PasswordFor(model => model.Password)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label> Confirm password </label>
+            <div class="col-md-4">
+                @Html.PasswordFor(model => model.ConfirmPassword)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label> Add picture </label>
+            <div class="col-md-4">
+                <input type="file" name="file" />
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2">
+                <p>@ViewBag.Message</p>
+                <input type="submit" value="Create account" class="btn btn-secondary" />
+            </div>
+        </div>
+    </div>
+}
