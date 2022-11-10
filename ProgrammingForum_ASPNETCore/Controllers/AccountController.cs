@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProgrammingForum_ASPNETCore.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace ProgrammingForum_ASPNETCore.Controllers
 {
@@ -14,6 +17,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+
         public AccountController(AppDbContext context, IMapper mapper)
         {
             _context = context;
@@ -28,11 +32,26 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         public async Task<IActionResult> Login(string userName, string password, string ReturnUrl)
         {
             var user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
-            if (user != null) //if user exists in db + check password
+            if (user != null)
             {
+                byte[] salt = user.PasswordSalt;
+
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: password!,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA256,
+                    iterationCount: 100000,
+                    numBytesRequested: 256 / 8));
+
+                if (hashed.CompareTo(user.HashedPassword) != 0)
+                {
+                    TempData["Error"] = "Error: Username or Password is incorrect";
+                    return View("Login");
+                }
+
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, userName));
-                //claims.Add(new Claim(ClaimTypes.NameIdentifier, userName)); //id from db
+
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
@@ -57,55 +76,76 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
         public IActionResult Register()
         {
-            ViewBag.Message = "";
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register(UserCreateModel userCreate, IFormFile file)
+        public async Task<IActionResult> Register(UserCreateModel userCreate, IFormFile file)
         {
-            if (file != null)
+            if (ModelState.IsValid)
             {
-                string extension = Path.GetExtension(file.FileName);
-                List<string> extensions = new List<string>() { ".png", ".jpg", ".jpeg" };
-
-                if (extensions.Contains(extension))
+                if (file != null)
                 {
-                    using (var ms = new MemoryStream())
+                    string extension = Path.GetExtension(file.FileName);
+                    List<string> extensions = new List<string>() { ".png", ".jpg", ".jpeg" };
+
+                    if (extensions.Contains(extension))
                     {
-                        file.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        userCreate.Picture = fileBytes;
+                        using (var ms = new MemoryStream())
+                        {
+                            file.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            userCreate.Picture = fileBytes;
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ImageError = "Error: File extensions can be '.png', '.jpg', '.jpeg' ";
+                        return View();
                     }
                 }
-                else
+
+                // check if user with given email/username exists
+                //
+                var uExists = _context.Users
+                    .Where(u => u.UserName == userCreate.UserName
+                    || u.Email == userCreate.Email).FirstOrDefault();
+
+                if (uExists != null)
                 {
-                    ViewBag.Message = "Error: File extensions can be '.png', '.jpg', '.jpeg' ";
-                    return View();
+                    ViewBag.UserExists = "Username or email already exists";
+                    return View(userCreate);
                 }
+
+                var usermap = _mapper.Map<User>(userCreate);
+
+                // Hash password
+
+                byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
+
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: userCreate.Password!,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA256,
+                    iterationCount: 100000,
+                    numBytesRequested: 256 / 8));
+
+                usermap.HashedPassword = hashed;
+                usermap.PasswordSalt = salt;
+
+                //_context.Users.Add(usermap);
+                //_context.SaveChanges();
+                var claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Name, usermap.UserName));
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+                await HttpContext.SignInAsync(claimsPrincipal);
+
+                return View("UserPage", userCreate); // Return new view with user info; add edit to view
             }
-
-            //Add user to database if username, email, password correct/unique
-            //if (!userCreate.Email.IsValidEmailAddress())
-            //{
-            //    ViewBag.Message = "Check your email";
-            //    return View();
-            //}
-            //if (!userCreate.Password.IsValidPassword())
-            //{
-            //    ViewBag.Message = "Check your password"; // write limitation
-            //    return View();
-            //}
-
-            // check if user with given email/password/username exists
-            //
-            var usermap = _mapper.Map<User>(userCreate);
-
-            //_context.Users.Add(usermap);
-            //_context.SaveChanges();
-
-
-            return View("UserInfo", userCreate); // Return new view with user info; add edit
+            return View(userCreate);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace DAL
             {
                 b.HasKey(u => u.UserName);
 
-                b.Property(u => u.UserName).HasMaxLength(30);
+                b.Property(u => u.UserName).HasMaxLength(50);
                 b.Property(u => u.HashedPassword).IsRequired();
                 b.Property(u => u.Email).IsRequired();
             });

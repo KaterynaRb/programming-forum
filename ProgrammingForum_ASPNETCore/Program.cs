@@ -1,4 +1,5 @@
 using DAL;
+using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add AutoMapper //
 builder.Services.AddAutoMapper(typeof(Program));
 
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -29,14 +29,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-
 //Seed data //
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     SeedData.Initialize(services);
 }
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
