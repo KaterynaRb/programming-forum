@@ -1,0 +1,11 @@
+﻿@model IEnumerable<ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyViewModel>
+
+<div>
+    @if(Model != null){
+        @foreach (ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyViewModel reply in Model)
+        {
+            <p>@Html.DisplayFor(m => reply.ContentReply) </p>
+            <p>@Html.DisplayFor(m => reply.AuthorName) </p>
+        }
+    }
+</div>

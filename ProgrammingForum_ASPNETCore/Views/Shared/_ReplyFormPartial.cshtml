@@ -1,0 +1,43 @@
+﻿@model ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyCreateModel
+
+
+@using (Html.BeginForm("CreatePostReply", "PostReply", FormMethod.Post, new { @id = "formreply" }))
+{
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <label>Create PostReply</label>
+            <div class="col-md-4">
+                @Html.TextAreaFor(model => Model.ContentReply, new { @class = "form-control", rows="5"})
+                @Html.ValidationMessageFor(model => Model.ContentReply, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => Model.PostId)
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2">
+                <p>@ViewBag.Message</p>
+                @*<input type="submit" value="Reply" class="btn btn-secondary" />*@
+                <button type="button" class="btn btn-secondary" onclick="SubmitReply()"> Reply </button>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+
+    function SubmitReply() {
+        var data = $("#formreply").serialize();
+        console.log(data);
+        $.ajax({
+            type: 'post',
+            url: '/PostReply/CreatePostReply',
+            data: data,
+            success: function(response){
+                $("#replies").html(response);
+                $("#formreply")[0].reset();
+            }
+        })
+    }
+</script>

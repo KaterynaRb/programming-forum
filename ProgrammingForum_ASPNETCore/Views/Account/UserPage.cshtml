@@ -1,4 +1,4 @@
-﻿@model ProgrammingForum_ASPNETCore.Models.UserCreateModel
+﻿@model ProgrammingForum_ASPNETCore.Models.UserModels.UserCreateModel
 
 <div>
     <h4>UserInfo</h4>
@@ -10,6 +10,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RegisteredDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegisteredDate)
         </dd>
 
         <dt>
