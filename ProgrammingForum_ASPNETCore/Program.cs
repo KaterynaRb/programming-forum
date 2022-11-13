@@ -16,6 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add AutoMapper //
 builder.Services.AddAutoMapper(typeof(Program));
+//Add WebOptimizer
+builder.Services.AddWebOptimizer();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -42,6 +44,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+app.UseWebOptimizer(); //
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

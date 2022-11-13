@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProgrammingForum_ASPNETCore.Models
+namespace ProgrammingForum_ASPNETCore.Models.UserModels
 {
     public class UserCreateModel
     {
@@ -35,7 +35,7 @@ namespace ProgrammingForum_ASPNETCore.Models
 
         public UserCreateModel()
         {
-            this.RegisteredDate = DateTime.Now;
+            RegisteredDate = DateTime.Now;
         }
     }
 }
