@@ -1,0 +1,120 @@
+﻿@model ProgrammingForum_ASPNETCore.Models.PostModels.PostViewModel
+
+<div>
+    <h4>Post</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AuthorName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AuthorName)
+        </dd>
+
+        @{
+            if (Model.AuthorPicture != null)
+            {
+                string imageBase64 = Convert.ToBase64String(Model.AuthorPicture);
+                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                <img src="@imageSrc" width="100" height="100" />
+            }
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+    </dl>
+</div>
+
+<div id="replies">
+    @await Html.PartialAsync("_PostRepliesPartial", Model.PostReplies)
+</div>
+
+<div id="createreply" class="col-md-4">
+    @await Html.PartialAsync("_ReplyFormPartial", Model.replyCreateModel)
+
+    @*<partial name="_ReplyFormPartial" model="reply" />*@
+
+    @*@using (Html.BeginForm("CreatePostReply", "PostReply", FormMethod.Post, new { @id = "form"}))
+    {
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <label>Detailed description</label>
+                <div class="col-md-4">
+                    @Html.TextAreaFor(model => model.Content, new { @class = "form-control", placeholder="Ask your question", rows="5"})
+                    @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <hr />
+            <div class="form-group">
+                <div class="col-md-offset-2">
+                    <p>@ViewBag.Message</p>
+                    @*<input type="submit" value="Reply" class="btn btn-secondary" />*@
+            @*        <button type="button" class="btn btn-secondary" onclick="SubmitReply()"> Reply </button>
+                </div>
+            </div>
+        </div>
+    }*@
+</div>
+
+
+@*<script>
+    function AreaForReply() {
+
+        //var rep = document.getElementById("newreply");
+
+        //if (typeof (rep) == 'undefined' || rep == null) {
+        //    var form = document.createElement('form');
+        //    form.setAttribute('action', '/PostReply/CreatePostReply');
+        //    form.setAttribute('method', 'post');
+
+        //    var newReply = document.createElement('textarea');
+        //    newReply.setAttribute('id', 'newreply');
+        //    newReply.setAttribute('rows', '5');
+        //    newReply.setAttribute('class', 'form-control');
+        //    newReply.setAttribute('placeholder', 'Answear');
+
+        //    var submitReply = document.createElement('input');
+        //    submitReply.setAttribute('type', 'submit');
+        //    submitReply.setAttribute('value', 'Send');
+        //    submitReply.setAttribute('class', 'btn btn-secondary');
+
+        //    form.appendChild(newReply);
+        //    form.appendChild(submitReply);
+        //    document.getElementById("createreply").appendChild(form);
+        //}
+    }
+
+    function SubmitReply(){
+        var data = $("#form").serialize();
+        console.log(data);
+        $.ajax({
+            type: 'post',
+            url: '/PostReply/CreatePostReply',
+            data: data
+        })
+    }
+</script>*@

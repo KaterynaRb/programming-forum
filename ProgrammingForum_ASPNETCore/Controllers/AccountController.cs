@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProgrammingForum_ASPNETCore.Models;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using ProgrammingForum_ASPNETCore.Models.UserModels;
 
 namespace ProgrammingForum_ASPNETCore.Controllers
 {
@@ -106,11 +106,11 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
                 // check if user with given email/username exists
                 //
-                var uExists = _context.Users
+                var findUser = _context.Users
                     .Where(u => u.UserName == userCreate.UserName
                     || u.Email == userCreate.Email).FirstOrDefault();
 
-                if (uExists != null)
+                if (findUser != null)
                 {
                     ViewBag.UserExists = "Username or email already exists";
                     return View(userCreate);
@@ -132,8 +132,8 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                 usermap.HashedPassword = hashed;
                 usermap.PasswordSalt = salt;
 
-                //_context.Users.Add(usermap);
-                //_context.SaveChanges();
+                _context.Users.Add(usermap);
+                _context.SaveChanges();
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, usermap.UserName));
 
@@ -142,9 +142,22 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
                 await HttpContext.SignInAsync(claimsPrincipal);
 
-                return View("UserPage", userCreate); // Return new view with user info; add edit to view
+                return RedirectToAction("UserPage");
             }
             return View(userCreate);
+        }
+
+        [Authorize]
+        public IActionResult UserPage()
+        {
+            User user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+
+            if (user != null)
+            {
+                var usermap = _mapper.Map<UserCreateModel>(user);
+                return View(usermap);
+            }
+            return View("Error");
         }
     }
 }
