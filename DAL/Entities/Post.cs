@@ -15,12 +15,12 @@ namespace DAL.Entities
         public int? AcceptedReplyId { get; set; }
         public int LikesCount { get; set; }
         public int DislikesCount { get; set; }
-        public User Author { get; set; }
+        public virtual User Author { get; set; }
         public string UserId { get; set; }
-        public Topic? Topic { get; set; }
+        public virtual Topic? Topic { get; set; }
         public int? TopicId { get; set; }
-        public IEnumerable<PostReply>? PostReplies { get; set; }
-        public IEnumerable<Like> Likes { get; set; }
-        public IEnumerable<Dislike> Dislikes { get; set; }
+        public virtual IEnumerable<PostReply>? PostReplies { get; set; }
+        public virtual IEnumerable<Like> Likes { get; set; }
+        public virtual IEnumerable<Dislike> Dislikes { get; set; }
     }
 }

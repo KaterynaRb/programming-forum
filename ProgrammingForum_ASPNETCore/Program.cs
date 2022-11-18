@@ -1,3 +1,4 @@
+using BLL;
 using DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ var connectionString = builder.Configuration.GetConnectionString("ProgrammingFor
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
+    options.UseLazyLoadingProxies();
     options.UseSqlServer(connectionString);
 });
 
@@ -17,6 +19,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAutoMapper(typeof(Program));
 //Add WebOptimizer
 builder.Services.AddWebOptimizer();
+
+// Add Service from BLL //
+builder.Services.AddScoped<IPost, PostService>();
+builder.Services.AddScoped<ITopic, TopicService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

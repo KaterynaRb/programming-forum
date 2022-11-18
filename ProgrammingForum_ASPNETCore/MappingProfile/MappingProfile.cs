@@ -2,6 +2,7 @@
 using DAL.Entities;
 using ProgrammingForum_ASPNETCore.Models.PostModels;
 using ProgrammingForum_ASPNETCore.Models.PostReplyModels;
+using ProgrammingForum_ASPNETCore.Models.TopicModels;
 using ProgrammingForum_ASPNETCore.Models.UserModels;
 
 namespace ProgrammingForum_ASPNETCore.MappingProfile
@@ -12,6 +13,21 @@ namespace ProgrammingForum_ASPNETCore.MappingProfile
         {
             CreateMap<User, UserCreateModel>().ReverseMap();
 
+            CreateMap<Topic, TopicViewModel>().ReverseMap();
+
+            //CreateMap<Post, PostListingModel>().ReverseMap();
+
+            CreateMap<Post, PostListingModel>()
+                .ForMember(
+                dest => dest.AuthorName,
+                opt => opt.MapFrom(src => src.UserId))
+                .ForMember(
+                dest => dest.AuthorScore,
+                opt => opt.MapFrom(src => src.Author.Score))
+                //.ForMember(
+                //dest => dest.TopicName,
+                //opt => opt.MapFrom(src => src.Topic.Name))
+                .ReverseMap();
 
             CreateMap<Post, PostViewModel>()
                 .ForMember(

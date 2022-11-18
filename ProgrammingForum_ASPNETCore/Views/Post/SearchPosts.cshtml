@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ProgrammingForum_ASPNETCore.Models.PostModels.PostListingModel>
+
+
+<form asp-action="SearchPosts" asp-controller="Post" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find post: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            @*<a asp-action="Index">Back to Full List</a>*@
+        </p>
+    </div>
+</form>
+
+<div>
+    @if (Model != null)
+    {
+        @foreach (ProgrammingForum_ASPNETCore.Models.PostModels.PostListingModel post in Model)
+        {
+            <p>@Html.DisplayFor(m => post.Description) </p>
+            <p>@Html.DisplayFor(m => post.AuthorName) </p>
+
+            @*<p>@Html.ActionLink(post.Description, "", "") </p>*@
+        }
+    }
+</div>
+
+@{
+    var prevDisabled = ViewData["prevDisabled"];
+    var nextDisabled = ViewData["nextDisabled"];
+}
+
+<a asp-action="SearchPosts"
+   asp-route-page="@((int)ViewData["pageIndex"] - 1)"
+   asp-route-searchString="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="SearchPosts"
+   asp-route-page="@((int)ViewData["pageIndex"] + 1)"
+   asp-route-searchString="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

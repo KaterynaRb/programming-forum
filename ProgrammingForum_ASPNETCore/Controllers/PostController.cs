@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL;
 using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,13 @@ namespace ProgrammingForum_ASPNETCore.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public PostController(AppDbContext context, IMapper mapper)
+        private readonly IPost _postService;
+
+        public PostController(AppDbContext context, IMapper mapper, IPost postService)
         {
             _context = context;
             _mapper = mapper;
+            _postService = postService;
         }
 
         [Authorize]
@@ -74,6 +78,42 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             postView.PostReplies = replyViews;
 
             return View(postView);
+        }
+
+        public async Task<IActionResult> SearchPosts(string searchString, int? page)
+        {
+            int pageSize = 3;
+            int pageNumber = 1;
+            if (page.HasValue)
+            {
+                pageNumber = (int)page;
+            }
+            IEnumerable<Post> posts;
+            IEnumerable<Post> allposts;
+            int totalPages;
+
+            //searchString = ViewData["CurrentFilter"].ToString();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                posts = _postService.GetPostsGlobalSearch(searchString, pageNumber, pageSize);
+                allposts = _postService.GetPostsGlobalSearch(searchString);
+                totalPages = (int)Math.Ceiling(allposts.Count() / (double)pageSize);
+            }
+            else
+            {
+                return View(); // Search is empty
+            }
+
+
+            ViewData["prevDisabled"] = !(pageNumber > 1) ? "disabled" : "";
+            ViewData["nextDisabled"] = !(pageNumber < totalPages) ? "disabled" : "";
+
+            ViewData["pageIndex"] = pageNumber;
+            ViewData["CurrentFilter"] = searchString;
+
+            var postListings = _mapper.Map<IEnumerable<PostListingModel>>(posts);
+
+            return View(postListings);
         }
     }
 }
