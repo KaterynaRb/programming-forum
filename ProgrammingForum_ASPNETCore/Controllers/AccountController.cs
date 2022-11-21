@@ -132,8 +132,20 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                 usermap.HashedPassword = hashed;
                 usermap.PasswordSalt = salt;
 
+                //using (var client = new HttpClient())
+                //{
+                //    client.BaseAddress = new Uri("http://localhost:44362/api/");
+
+                //    //HTTP POST
+                //    var postTask = client.PostAsJsonAsync<User>("User", usermap);
+                //    postTask.Wait();
+                //    var result = postTask.Result;
+                //}
+
+
                 _context.Users.Add(usermap);
                 _context.SaveChanges();
+
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, usermap.UserName));
 

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ProgrammingForum_ASPNETCore.Models.PostModels.PostViewModel>
+
+@{
+    ViewData["Title"] = "AllPosts";
+}
+
+<div class="text-center">
+    <h1>AllPosts</h1>
+    <h2>Topic</h2>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AuthorName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LikesCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DislikesCount)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.AuthorName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.LikesCount)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.DislikesCount)
+            </td>
+            <td>
+                @Html.ActionLink("View post", "ReadPost", new { id=item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -57,10 +57,10 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
             var postView = _mapper.Map<PostViewModel>(post); //
 
-            if (_context.Users.Find(User.Identity.Name).Picture != null)
-            {
-                postView.AuthorPicture = _context.Users.Find(User.Identity.Name).Picture;
-            }
+            //if (_context.Users.Find(User.Identity.Name).Picture != null)
+            //{
+            //    postView.AuthorPicture = _context.Users.Find(User.Identity.Name).Picture;
+            //}
 
             PostReplyCreateModel model = new PostReplyCreateModel();
             model.PostId = post.Id;

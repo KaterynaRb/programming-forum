@@ -7,8 +7,8 @@
 
         <div class="form-group">
             <label>Create PostReply</label>
-            <div class="col-md-4">
-                @Html.TextAreaFor(model => Model.ContentReply, new { @class = "form-control", rows="5"})
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => Model.ContentReply, new { @class = "form-control", rows="1"})
                 @Html.ValidationMessageFor(model => Model.ContentReply, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => Model.PostId)
             </div>
@@ -18,7 +18,6 @@
         <div class="form-group">
             <div class="col-md-offset-2">
                 <p>@ViewBag.Message</p>
-                @*<input type="submit" value="Reply" class="btn btn-secondary" />*@
                 <button type="button" class="btn btn-secondary" onclick="SubmitReply()"> Reply </button>
             </div>
         </div>

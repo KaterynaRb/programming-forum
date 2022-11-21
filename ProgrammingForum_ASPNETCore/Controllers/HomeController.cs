@@ -4,7 +4,6 @@ using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using ProgrammingForum_ASPNETCore.Models;
-using ProgrammingForum_ASPNETCore.Models.PostModels;
 using ProgrammingForum_ASPNETCore.Models.TopicModels;
 using System.Diagnostics;
 
@@ -25,7 +24,30 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
         public IActionResult Index()
         {
-            var topics = _topicService.GetAll();
+            //var topics = _topicService.GetAll(); //
+            IEnumerable<Topic> topics = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:41696/api/");
+                //HTTP GET
+                var responseTask = client.GetAsync("Topic");
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadFromJsonAsync<IEnumerable<Topic>>();
+                    readTask.Wait();
+                    topics = readTask.Result;
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
+            }
+
             var topicViews = _mapper.Map<IEnumerable<TopicViewModel>>(topics);
             return View(topicViews);
         }
