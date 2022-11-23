@@ -33,7 +33,7 @@ namespace ProgrammingForum_WebAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<Topic> Get(int id)
         {
-            var topic =  _context.Topics.Include(topic => topic.Posts).Where(topic => topic.Id == id).First(); //.FindAsync(id);
+            var topic =  _context.Topics.Include(topic => topic.Posts).Where(topic => topic.Id == id).First(); //.FirstOrDefaultAsync(id);
             if (topic == null)
             {
                 return NotFound();

@@ -1,4 +1,8 @@
 ﻿@model ProgrammingForum_ASPNETCore.Models.PostModels.PostViewModel
+@{
+    var liked = "fa-regular";
+    if ((bool)ViewData["liked"]) liked = "fa-solid";
+}
 
 <div>
     <h4>Post</h4>
@@ -44,6 +48,19 @@
         <dd>
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LikesCount)
+        </dt>
+
+        <dd>
+            <button class=" btn btn-outline-secondary" onclick="SubmitLike(@Model.Id,'@User.Identity.Name')" id="likepost-@Model.Id">
+                <i id="likeIcon-@User.Identity.Name" class="@liked fa-thumbs-up"></i>
+                <p id="likesCount-@Model.Id">
+                    @Html.DisplayFor(model => model.LikesCount)
+                </p>
+            </button>
+        </dd>
     </dl>
 </div>
 
@@ -54,3 +71,6 @@
 <div id="replies">
     @await Html.PartialAsync("~/Views/PostReply/_PostRepliesPartial.cshtml", Model.PostReplies)
 </div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/likesCount.js"></script>
