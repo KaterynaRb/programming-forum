@@ -13,7 +13,7 @@ namespace ProgrammingForum_ASPNETCore.Models.PostReplyModels
         public int PostId { get; set; }
         public PostReply? ParentReply { get; set; }
         public int? ParentReplyId { get; set; }
-
+        
         public PostReplyCreateModel()
         {
             this.CreatedDate = DateTime.Now;

@@ -18,15 +18,21 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             _mapper = mapper;
         }
 
+        public IActionResult CreateReplyToReply(PostReplyCreateModel postReplyCreateModel)
+        {
+            List<PostReplyViewModel> repliesView = new List<PostReplyViewModel>();
+
+            return PartialView("_PostRepliesPartial", repliesView);
+        }
+
+
         //[Authorize]
         [HttpPost]
         public IActionResult CreatePostReply(PostReplyCreateModel replyCreateModel)
         {
-            replyCreateModel.AuthorName = User.Identity.Name;
+            replyCreateModel.AuthorName = User.Identity.Name; //redirect to login
 
             var postReply = _mapper.Map<PostReply>(replyCreateModel);
-            //var postReplyView = _mapper.Map<PostReplyViewModel>(postReply);
-
 
             _context.PostReplies.Add(postReply);
             _context.SaveChanges();

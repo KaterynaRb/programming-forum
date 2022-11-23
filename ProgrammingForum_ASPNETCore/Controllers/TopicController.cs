@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DAL;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingForum_ASPNETCore.Models;
 using ProgrammingForum_ASPNETCore.Models.PostModels;
+using ProgrammingForum_ASPNETCore.Models.TopicModels;
 
 namespace ProgrammingForum_ASPNETCore.Controllers
 {
@@ -20,6 +22,68 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             _postService = postService;
             _mapper = mapper;
         }
+
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AllTopics()
+        {
+            IEnumerable<Topic> topics = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:41696/api/");
+                //HTTP GET
+                var responseTask = client.GetAsync("Topic");
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadFromJsonAsync<IEnumerable<Topic>>();
+                    readTask.Wait();
+                    topics = readTask.Result;
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
+            }
+
+            var topicViews = _mapper.Map<IEnumerable<TopicViewModel>>(topics);
+            return View(topicViews);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AllPostsInTopic(int id)
+        {
+            IEnumerable<Post> postsInTopic = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:41696/api/Topic/");
+                //HTTP GET
+                var responseTask = client.GetAsync(id.ToString()/* + "/Posts"*/);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadFromJsonAsync<Topic>();
+                    readTask.Wait();
+                    postsInTopic = readTask.Result.Posts;
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                }
+            }
+
+            var postViews = _mapper.Map<IEnumerable<PostViewModel>>(postsInTopic);
+            return View(postViews);
+        }
+        
 
         public async Task<IActionResult> Posts(int id, string searchString, int? page)
         {

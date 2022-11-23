@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ProgrammingForum_ASPNETCore.Models.TopicModels.TopicViewModel>
+
+@{
+    ViewData["Title"] = "AllTopics";
+}
+
+<div class="text-center">
+    <h1>AllTopics</h1>
+</div>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @{
+                    if (item.Image != null)
+                    {
+                        string imageBase64 = Convert.ToBase64String(item.Image);
+                        string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                        <img src="@imageSrc" width="50" height="50" />
+                    }
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("View posts", "AllPostsInTopic", new { id=item.Id }) |
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+    }
+</table>

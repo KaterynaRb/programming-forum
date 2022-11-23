@@ -1,0 +1,103 @@
+﻿@model ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyCreateModel
+
+<button type="button" class="btn btn-secondary" onclick="AreaForReplyToReply(@Model.ParentReplyId)"> ReplyToReply </button>
+<div id="reply-@Model.ParentReplyId" class="col-md-4" style="display:none">
+
+    @using (Html.BeginForm("CreateReplyToReply", "PostReply", FormMethod.Post, new { @id = "replytoreply" }))
+    {
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <label>ReplyToReply</label>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => Model.ContentReply, new { @class = "form-control", rows="1"})
+                    @Html.ValidationMessageFor(model => Model.ContentReply, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => Model.PostId)
+                    @Html.HiddenFor(model => Model.ParentReplyId)
+                    @Html.HiddenFor(model => Model.AuthorName)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2">
+                    <p>@ViewBag.Message</p>
+                    <button type="button" class="btn btn-secondary" onclick="SendReplyToReply()"> Reply </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+<script>
+
+    function AreaForReplyToReply(id){
+        var rep = document.getElementById("reply-" + id);
+
+        if (rep.style.display === 'none') {
+            rep.style.display = 'block';
+        } else {
+            rep.style.display = 'none';
+        }
+
+        //var rep = document.getElementById("replytoreply");
+
+        //console.log(id);
+        //console.log("reply-" + id);
+
+        //if (rep != null) {
+        //    rep.parentNode.removeChild(rep);
+        //}
+    }
+    //function AreaForReplyToReply(id) {
+
+    //    var rep = document.getElementById("replytoreply");
+
+    //    console.log(id);
+    //    console.log("reply-" + id);
+
+    //    if (rep != null) {
+    //        rep.parentNode.removeChild(rep);
+    //    }
+
+    //    rep = document.getElementById("replytoreply");
+    //    if (typeof (rep) == 'undefined' || rep == null) {
+    //        var form = document.createElement('form');
+    //        form.setAttribute('id', 'replytoreply');
+    //        form.setAttribute('action', '/PostReply/CreateReplyToReply');
+    //        form.setAttribute('method', 'post');
+
+    //        var newReply = document.createElement('textarea');
+    //        newReply.setAttribute('rows', '2');
+    //        newReply.setAttribute('class', 'form-control');
+    //        newReply.setAttribute('placeholder', 'Reply');
+
+    //        var replyId = document.createElement('input');
+    //        replyId.setAttribute('type', 'hidden');
+    //        replyId.value = id;
+
+    //        var submitReply = document.createElement('input');
+    //        submitReply.setAttribute('type', 'submit');
+    //        submitReply.setAttribute('onclick', SendReplyToReply());
+    //        submitReply.setAttribute('value', 'Send');
+    //        submitReply.setAttribute('class', 'btn btn-secondary');
+
+    //        form.appendChild(newReply);
+    //        form.appendChild(replyId);
+    //        form.appendChild(submitReply);
+    //        document.getElementById("reply-" + id).appendChild(form);
+    //    }
+    //}
+
+    function SendReplyToReply() {
+        var data = $("#replytoreply").serialize();
+        console.log(data);
+        $.ajax({
+            type: 'post',
+            url: '/PostReply/CreateReplyToReply',
+            data: data
+        })
+    }
+</script>

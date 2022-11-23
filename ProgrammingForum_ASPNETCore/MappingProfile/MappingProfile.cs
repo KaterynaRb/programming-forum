@@ -13,6 +13,8 @@ namespace ProgrammingForum_ASPNETCore.MappingProfile
         {
             CreateMap<User, UserCreateModel>().ReverseMap();
 
+            CreateMap<User, UserViewModel>().ReverseMap();
+
             CreateMap<Topic, TopicViewModel>().ReverseMap();
 
             //CreateMap<Post, PostListingModel>().ReverseMap();

@@ -4,15 +4,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-<form asp-action="SearchPosts" asp-controller="Post" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find post: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            @*<a asp-action="Index">Back to Full List</a>*@
-        </p>
-    </div>
-</form>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
@@ -23,7 +14,6 @@
     {
         @foreach (ProgrammingForum_ASPNETCore.Models.TopicModels.TopicViewModel topic in Model)
         {
-            <p>@Html.DisplayFor(m => topic.Name) </p>
             <p>@Html.ActionLink(topic.Name, "Posts", "Topic", new {id = topic.Id}) </p>
         }
     }

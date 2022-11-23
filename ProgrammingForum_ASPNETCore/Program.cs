@@ -2,6 +2,8 @@ using BLL;
 using DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using ProgrammingForum_ASPNETCore.Hubs;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +34,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
+        options.Events = new CookieAuthenticationEvents()
+        {
+            OnSigningIn = async context =>
+            {
+                var principal = context.Principal;
+                if (principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value == "christopher")
+                {
+                    var claimsIdentity = principal.Identity as ClaimsIdentity;
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                }
+            }
+        };
     });
+
+//
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -64,5 +81,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<PostHub>("/hubs/post"); //
 
 app.Run();

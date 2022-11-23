@@ -57,10 +57,8 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
             var postView = _mapper.Map<PostViewModel>(post); //
 
-            if (_context.Users.Find(User.Identity.Name).Picture != null)
-            {
-                postView.AuthorPicture = _context.Users.Find(User.Identity.Name).Picture;
-            }
+            if (_context.Likes.Find(User.Identity.Name, post.Id) != null) ViewData["liked"] = true;
+            else ViewData["liked"] = false;
 
             PostReplyCreateModel model = new PostReplyCreateModel();
             model.PostId = post.Id;
