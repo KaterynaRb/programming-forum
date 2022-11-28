@@ -60,18 +60,24 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             if (_context.Likes.Find(User.Identity.Name, post.Id) != null) ViewData["liked"] = true;
             else ViewData["liked"] = false;
 
-            PostReplyCreateModel model = new PostReplyCreateModel();
-            model.PostId = post.Id;
+            if (_context.Dislikes.Find(User.Identity.Name, post.Id) != null) ViewData["disliked"] = true;
+            else ViewData["disliked"] = false;
 
-            postView.replyCreateModel = model;
+            //PostReplyCreateModel model = new PostReplyCreateModel();
+            //model.PostId = post.Id;
+
+            //postView.replyCreateModel = model;
 
             List<PostReplyViewModel> replyViews = new List<PostReplyViewModel>();
             List<PostReply> replies = _context.PostReplies.Where(pr => pr.PostId == post.Id).ToList();
 
             foreach(var r in replies)
             {
-                var repView = _mapper.Map<PostReplyViewModel>(r);
-                replyViews.Add(repView);
+                if (r.ParentReplyId == null)
+                {
+                    var repView = _mapper.Map<PostReplyViewModel>(r);
+                    replyViews.Add(repView);
+                }
             }
             postView.PostReplies = replyViews;
 

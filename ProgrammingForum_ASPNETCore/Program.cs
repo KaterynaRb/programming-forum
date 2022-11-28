@@ -1,12 +1,16 @@
 using BLL;
 using DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ProgrammingForum_ASPNETCore.Hubs;
+using System.Globalization;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 //Connection to DB //
 var connectionString = builder.Configuration.GetConnectionString("ProgrammingForumDbConnectionStr");
@@ -27,29 +31,37 @@ builder.Services.AddScoped<IPost, PostService>();
 builder.Services.AddScoped<ITopic, TopicService>();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddViewLocalization();
 
 // Authentication //
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+}).AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
-        options.Events = new CookieAuthenticationEvents()
-        {
-            OnSigningIn = async context =>
-            {
-                var principal = context.Principal;
-                if (principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value == "christopher")
-                {
-                    var claimsIdentity = principal.Identity as ClaimsIdentity;
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-                }
-            }
-        };
+    })
+    .AddOpenIdConnect("google", options =>
+    {
+        options.Authority = "https://accounts.google.com";
+        options.ClientId = builder.Configuration["Forum:GoogleClientId"];
+        options.ClientSecret = builder.Configuration["Forum:GoogleClientSecret"];
+        options.CallbackPath = "/auth";
     });
 
 //
 builder.Services.AddSignalR();
+
+// Localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+var supportedCultures = new[] { "en", "uk" };
+var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
 
 var app = builder.Build();
 
@@ -68,6 +80,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseWebOptimizer(); //
+app.UseRequestLocalization(localizationOptions); //
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

@@ -9,6 +9,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using ProgrammingForum_ASPNETCore.Models.UserModels;
+using System.Security;
+using System.Runtime.InteropServices;
 
 namespace ProgrammingForum_ASPNETCore.Controllers
 {
@@ -35,7 +37,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             {
                 byte[] salt = user.PasswordSalt;
 
-                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2( // as char array
                     password: password!,
                     salt: salt,
                     prf: KeyDerivationPrf.HMACSHA256,
@@ -48,8 +50,16 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                     return View("Login");
                 }
 
-                var claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name, userName));
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, userName)
+                };
+
+                if (user.Role != null)
+                {
+                    Claim claim = new Claim(ClaimTypes.Role, user.Role);
+                    claims.Add(claim);
+                }
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
@@ -65,11 +75,25 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             return View("Login");
         }
 
+        [HttpGet("login/google")]
+        public async Task LoginGoogle(string returnUrl)
+        {
+            if(User != null && User.Identities.Any(identity => identity.IsAuthenticated))
+            {
+                RedirectToAction("Index", "Home");
+            }
+
+            var authenticationProperties = new AuthenticationProperties { RedirectUri = returnUrl };
+
+            await HttpContext.ChallengeAsync("google", authenticationProperties).ConfigureAwait(false);
+        }
+
+
         [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return Redirect("/");
+            return Redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:44350");
         }
 
 

@@ -1,12 +1,14 @@
-﻿@model IEnumerable<ProgrammingForum_ASPNETCore.Models.TopicModels.TopicViewModel>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer ViewLocalizer
+
+@model IEnumerable<ProgrammingForum_ASPNETCore.Models.TopicModels.TopicViewModel>
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4"> @ViewLocalizer["Welcome"] </h1>
 </div>
 
 <div>

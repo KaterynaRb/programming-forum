@@ -1,7 +1,11 @@
-﻿@model ProgrammingForum_ASPNETCore.Models.PostModels.PostViewModel
+﻿@using ProgrammingForum_ASPNETCore.Models.PostReplyModels;
+@model ProgrammingForum_ASPNETCore.Models.PostModels.PostViewModel
 @{
     var liked = "fa-regular";
     if ((bool)ViewData["liked"]) liked = "fa-solid";
+
+    var disliked = "fa-regular";
+    if ((bool)ViewData["disliked"]) disliked = "fa-solid";
 }
 
 <div>
@@ -49,10 +53,6 @@
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.LikesCount)
-        </dt>
-
         <dd>
             <button class=" btn btn-outline-secondary" onclick="SubmitLike(@Model.Id,'@User.Identity.Name')" id="likepost-@Model.Id">
                 <i id="likeIcon-@User.Identity.Name" class="@liked fa-thumbs-up"></i>
@@ -60,12 +60,20 @@
                     @Html.DisplayFor(model => model.LikesCount)
                 </p>
             </button>
+
+            <button class=" btn btn-outline-secondary" onclick="SubmitDislike(@Model.Id,'@User.Identity.Name')" id="dislikepost-@Model.Id">
+                <i id="dislikeIcon-@User.Identity.Name" class="@disliked fa-thumbs-down"></i>
+                <p id="dislikesCount-@Model.Id">
+                    @Html.DisplayFor(model => model.DislikesCount)
+                </p>
+            </button>
         </dd>
+
     </dl>
 </div>
 
 <div id="createreply" class="col-md-4">
-    @await Html.PartialAsync("~/Views/PostReply/_ReplyFormPartial.cshtml", Model.replyCreateModel)
+    @await Html.PartialAsync("~/Views/PostReply/_ReplyFormPartial.cshtml", new PostReplyCreateModel { PostId = Model.Id, AuthorName = User.Identity.Name})
 </div>
 
 <div id="replies">
@@ -74,3 +82,4 @@
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/likesCount.js"></script>
+<script src="~/js/dislikesCount.js"></script>

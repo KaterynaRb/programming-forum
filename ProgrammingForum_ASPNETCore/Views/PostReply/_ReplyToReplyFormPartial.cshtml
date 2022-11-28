@@ -1,9 +1,10 @@
 ﻿@model ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyCreateModel
 
-<button type="button" class="btn btn-secondary" onclick="AreaForReplyToReply(@Model.ParentReplyId)"> ReplyToReply </button>
+
+
 <div id="reply-@Model.ParentReplyId" class="col-md-4" style="display:none">
 
-    @using (Html.BeginForm("CreateReplyToReply", "PostReply", FormMethod.Post, new { @id = "replytoreply" }))
+    @using (Html.BeginForm("CreateReplyToReply", "PostReply", FormMethod.Post, new { @id = "replytoreply-" + @Model.ParentReplyId }))
     {
         <div class="form-horizontal">
 
@@ -21,13 +22,12 @@
             <div class="form-group">
                 <div class="col-md-offset-2">
                     <p>@ViewBag.Message</p>
-                    <button type="button" class="btn btn-secondary" onclick="SendReplyToReply()"> Reply </button>
+                    <button type="button" class="btn btn-secondary" onclick="SendReplyToReply(@Model.ParentReplyId)"> Reply </button>
                 </div>
             </div>
         </div>
     }
 </div>
-
 
 
 
@@ -41,63 +41,19 @@
         } else {
             rep.style.display = 'none';
         }
-
-        //var rep = document.getElementById("replytoreply");
-
-        //console.log(id);
-        //console.log("reply-" + id);
-
-        //if (rep != null) {
-        //    rep.parentNode.removeChild(rep);
-        //}
     }
-    //function AreaForReplyToReply(id) {
 
-    //    var rep = document.getElementById("replytoreply");
-
-    //    console.log(id);
-    //    console.log("reply-" + id);
-
-    //    if (rep != null) {
-    //        rep.parentNode.removeChild(rep);
-    //    }
-
-    //    rep = document.getElementById("replytoreply");
-    //    if (typeof (rep) == 'undefined' || rep == null) {
-    //        var form = document.createElement('form');
-    //        form.setAttribute('id', 'replytoreply');
-    //        form.setAttribute('action', '/PostReply/CreateReplyToReply');
-    //        form.setAttribute('method', 'post');
-
-    //        var newReply = document.createElement('textarea');
-    //        newReply.setAttribute('rows', '2');
-    //        newReply.setAttribute('class', 'form-control');
-    //        newReply.setAttribute('placeholder', 'Reply');
-
-    //        var replyId = document.createElement('input');
-    //        replyId.setAttribute('type', 'hidden');
-    //        replyId.value = id;
-
-    //        var submitReply = document.createElement('input');
-    //        submitReply.setAttribute('type', 'submit');
-    //        submitReply.setAttribute('onclick', SendReplyToReply());
-    //        submitReply.setAttribute('value', 'Send');
-    //        submitReply.setAttribute('class', 'btn btn-secondary');
-
-    //        form.appendChild(newReply);
-    //        form.appendChild(replyId);
-    //        form.appendChild(submitReply);
-    //        document.getElementById("reply-" + id).appendChild(form);
-    //    }
-    //}
-
-    function SendReplyToReply() {
-        var data = $("#replytoreply").serialize();
+    function SendReplyToReply(id) {
+        var data = $("#replytoreply-"+id).serialize();
         console.log(data);
         $.ajax({
             type: 'post',
-            url: '/PostReply/CreateReplyToReply',
-            data: data
+            url: '/PostReply/CreatePostReply',
+            data: data,
+            success: function(response){
+                $("#replies").html(response);
+                $("#replytoreply-" + id)[0].reset();
+            }
         })
     }
 </script>

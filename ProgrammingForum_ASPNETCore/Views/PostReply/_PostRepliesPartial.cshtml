@@ -1,78 +1,33 @@
 ﻿@using ProgrammingForum_ASPNETCore.Models.PostReplyModels
 @model IEnumerable<ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyViewModel>
 
+
+
+@{
+    void ShowReplies(IEnumerable<PostReplyViewModel> replies)
+    {
+        <ul>
+            @foreach (var r in replies)
+            {
+                <li>
+                    @Html.DisplayFor(m => r.ContentReply)
+                    <button class=" btn btn-outline-secondary" onclick="AreaForReplyToReply(@r.Id)"> <i class="fa-regular fa-comment"></i> </button>
+                    @Html.Partial("~/Views/PostReply/_ReplyToReplyFormPartial.cshtml", new PostReplyCreateModel { ParentReplyId = r.Id, PostId = r.PostId, AuthorName = User.Identity.Name})
+
+                    @if (r.Replies.Any())
+                    {
+                        ShowReplies(r.Replies);
+                    }
+
+                </li>
+            }
+        </ul>
+    }
+} 
+
 <div>
-    @if(Model != null){
-        @foreach (ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyViewModel reply in Model)
-        {
-            <p>@Html.DisplayFor(m => reply.ContentReply) </p>
-            <p>@Html.DisplayFor(m => reply.AuthorName) </p>
-            <p>@Html.DisplayFor(m => reply.CreatedDate) </p>
-            @*<button type="button" class="btn btn-secondary" onclick="AreaForReplyToReply(@reply.Id)"> ReplyToReply </button>
-            <div id="reply-@reply.Id" class="col-md-4">
-            </div>*@
-
-            @await Html.PartialAsync("~/Views/PostReply/_ReplyToReplyFormPartial.cshtml", new PostReplyCreateModel { ParentReplyId = reply.Id, PostId = reply.PostId, AuthorName = User.Identity.Name})
-
-        }
+    @if (Model != null)
+    {
+        ShowReplies(Model);
     }
 </div>
-
-
-
-@*<button type="button" class="btn btn-secondary" onclick="AreaForReplyToReply(@reply.Id)"> ReplyToReply </button>
-<div id="reply-@reply.Id" class="col-md-4">
-</div>
-
-<script>
-    function AreaForReplyToReply(id) {
-
-        var rep = document.getElementById("replytoreply");
-
-        console.log(id);
-        console.log("reply-" + id);
-
-        if (rep != null){
-            rep.parentNode.removeChild(rep);
-        }
-
-        rep = document.getElementById("replytoreply");
-        if (typeof(rep) == 'undefined' || rep == null) {
-            var form = document.createElement('form');
-            form.setAttribute('id', 'replytoreply');
-            form.setAttribute('action', '/PostReply/CreateReplyToReply');
-            form.setAttribute('method', 'post');
-
-            var newReply = document.createElement('textarea');
-            newReply.setAttribute('rows', '2');
-            newReply.setAttribute('cols', '5'); //
-            newReply.setAttribute('class', 'form-control');
-            newReply.setAttribute('placeholder', 'Reply');
-
-            var replyId = document.createElement('input');
-            replyId.setAttribute('type', 'hidden');
-            replyId.value = id;
-
-            var submitReply = document.createElement('input');
-            submitReply.setAttribute('type', 'submit');
-            submitReply.setAttribute('onclick', SendReplyToReply());
-            submitReply.setAttribute('value', 'Send');
-            submitReply.setAttribute('class', 'btn btn-secondary');
-
-            form.appendChild(newReply);
-            form.appendChild(replyId);
-            form.appendChild(submitReply);
-            document.getElementById("reply-" + id).appendChild(form);
-        }
-    }
-
-    function SendReplyToReply(){
-        var data = $("#replytoreply").serialize();
-        console.log(data);
-        $.ajax({
-            type: 'post',
-            url: '/PostReply/CreateReplyToReply',
-            data: data
-        })
-    }
-</script>*@

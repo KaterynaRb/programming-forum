@@ -25,7 +25,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:41696/api/");
+                client.BaseAddress = new Uri("http://localhost:54962/api/");
                 //HTTP GET
                 var responseTask = client.GetAsync("User");
                 responseTask.Wait();
