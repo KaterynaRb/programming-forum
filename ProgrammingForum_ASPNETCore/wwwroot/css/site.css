@@ -14,5 +14,18 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+header {
+    background-color: #8ee8ce;
+}
+
+footer {
+    background-color: #8ee8ce;
+    padding: 5px;
+}
+
+.menu {
+    background-color: #8ee8ce;
 }

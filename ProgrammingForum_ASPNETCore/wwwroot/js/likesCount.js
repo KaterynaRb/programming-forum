@@ -4,12 +4,10 @@ connection.on("UpdateLikesInPage", function (totalLikes, postId, liked, userId) 
     document.getElementById("likesCount-" + postId).innerText = `${totalLikes}`;
 
     if (liked) {
-
         var icon = document.getElementById("likeIcon-" + userId);
         icon.classList.remove("fa-regular");
         icon.classList.add("fa-solid");
     } else {
-
         var icon = document.getElementById("likeIcon-" + userId);
         icon.classList.remove("fa-solid");
         icon.classList.add("fa-regular");
