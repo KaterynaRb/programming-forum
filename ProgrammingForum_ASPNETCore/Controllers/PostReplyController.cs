@@ -19,29 +19,36 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             _mapper = mapper;
         }
 
-        //public IActionResult  /*List<PostReplyViewModel>*/ CreateReplyToReply(PostReplyCreateModel replyToReplyCreateModel)
-        //{
-        //    //replyToReplyCreateModel.AuthorName = User.Identity.Name; //redirect to login
 
-        //    var postReply = _mapper.Map<PostReply>(replyToReplyCreateModel);
+        //[Authorize]
+        [HttpPost]
+        public IActionResult CreateReplyToReply(int parentId, string contentReply)
+        {
+            PostReplyCreateModel replyCreateModel = new PostReplyCreateModel();
+            replyCreateModel.AuthorName = User.Identity.Name; //redirect to login
+            replyCreateModel.ParentReplyId = parentId;
+            replyCreateModel.ContentReply = contentReply;
+            replyCreateModel.PostId = _context.PostReplies.Where(p => p.Id == parentId).FirstOrDefault().PostId;
 
-        //    _context.PostReplies.Add(postReply);
-        //    _context.SaveChanges();
+            var postReply = _mapper.Map<PostReply>(replyCreateModel);
+
+            _context.PostReplies.Add(postReply);
+            _context.SaveChanges();
 
 
-        //    List<PostReply> postReplies = _context.PostReplies.Where(pr => pr.PostId == postReply.PostId).ToList();
-        //    List<PostReplyViewModel> repliesView = new List<PostReplyViewModel>();
-        //    foreach (var reply in postReplies)
-        //    {
-        //        if (reply.ParentReplyId == null)
-        //        {
-        //            var replyView = _mapper.Map<PostReplyViewModel>(reply);
-        //            repliesView.Add(replyView);
-        //        }
-        //    }
-        //    return PartialView("_PostRepliesPartial", repliesView);
-        //    //return repliesView;
-        //}
+            List<PostReply> postReplies = _context.PostReplies.Where(pr => pr.PostId == postReply.PostId).ToList();
+            List<PostReplyViewModel> repliesView = new List<PostReplyViewModel>();
+            foreach (var reply in postReplies)
+            {
+                if (reply.ParentReplyId == null)
+                {
+                    var replyView = _mapper.Map<PostReplyViewModel>(reply);
+                    repliesView.Add(replyView);
+                }
+            }
+
+            return PartialView("_PostRepliesPartial", repliesView);
+        }
 
 
         //[Authorize]
@@ -66,7 +73,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                     repliesView.Add(replyView);
                 }
             }
-            
+
             return PartialView("_PostRepliesPartial", repliesView);
         }
     }

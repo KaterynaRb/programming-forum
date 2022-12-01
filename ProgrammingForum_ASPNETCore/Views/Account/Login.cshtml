@@ -2,7 +2,9 @@
     var returnUrl = Context.Request.Query["ReturnUrl"];
 }
 
-<h3>Login</h3>
+<div class="text-center text-light">
+    <h2> Login </h2>
+</div>
 <hr />
 
 @if (!string.IsNullOrEmpty(TempData["Error"] as string))
@@ -10,30 +12,32 @@
     <p>@TempData["Error"]</p>
 }
 
-<form asp-route-returnurl = "@returnUrl", method="post">
+<div class="d-flex justify-content-center">
+    <div class="text-center">
+        <form asp-route-returnurl="@returnUrl" , method="post">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input class="form-control" type="text" name="userName" placeholder="Username" />
+                    </div>
+                </div>
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            <div class="col-md-2">
-                <input class="form-control" type="text" name="userName" placeholder="Username" />
-            </div>
-        </div>
+                <div class="form-group=">
+                    <div class="col-md-12 pt-2">
+                        <input class="form-control" type="password" name="password" placeholder="Password" />
+                    </div>
+                </div>
 
-        <div class="form-group=">
-            <div class="col-md-2">
-                <input class="form-control" type="password" name="password" placeholder="Password" />
+                <div class="form-group">
+                    <div class="col-md-offset-2 pt-2">
+                        <input class="btn btn-secondary" type="submit" value="Login" />
+                    </div>
+                </div>
             </div>
-        </div>
+        </form>
 
-        <div class="form-group">
-            <div class="col-md-offset-2">
-                <input class="btn btn-secondary" type="submit" value="Login" />
-            </div>
+        <div class="pt-2">
+            <a class="text-light" href="/login/google?returnUrl=@returnUrl"> <i class="fa-brands fa-google"></i> Login with Google</a>
         </div>
     </div>
-    
-</form>
-
-<div>
-    <a href="/login/google?returnUrl=@returnUrl"> <i class="fa-brands fa-google"></i> Login with Google</a>
 </div>

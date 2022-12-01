@@ -2,17 +2,52 @@
 @model IEnumerable<ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyViewModel>
 
 
-
 @{
     void ShowReplies(IEnumerable<PostReplyViewModel> replies)
     {
         <ul>
             @foreach (var r in replies)
             {
-                <li>
-                    @Html.DisplayFor(m => r.ContentReply)
-                    <button class=" btn btn-outline-secondary" onclick="AreaForReplyToReply(@r.Id)"> <i class="fa-regular fa-comment"></i> </button>
-                    @Html.Partial("~/Views/PostReply/_ReplyToReplyFormPartial.cshtml", new PostReplyCreateModel { ParentReplyId = r.Id, PostId = r.PostId, AuthorName = User.Identity.Name})
+                <li class="text-light reply my-3">
+                    <div class="row">
+                        <div class="col-3 text-light">
+                            <label> Commented: </label>
+                            @Html.DisplayFor(m => r.CreatedDate)
+
+                            <label> Author: </label>
+                            @{
+                                if (r.AuthorPicture != null)
+                                {
+                                    string imageBase64 = Convert.ToBase64String(r.AuthorPicture);
+                                    string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                                    <img src="@imageSrc" width="50" height="50" />
+                                }
+                            }
+                            @Html.DisplayFor(m => r.AuthorName)
+                        </div>
+                        <div class="col-7 text-light comment">
+                            @Html.DisplayFor(m => r.ContentReply)
+                        </div>
+                        <div class="col-2 text-light">
+                            <button class="btn btn-outline-light text-light m-1" onclick="SubmitLikeOnReply(@r.Id,'@User.Identity.Name')" id="likereply-@r.Id">
+                                <i id="likeIcon-@User.Identity.Name" class="fa-regular fa-thumbs-up"></i>
+                                <p class="p-button" id="likesCount-@r.Id">
+                                    @Html.DisplayFor(m => r.LikesCount)
+                                </p>
+                            </button>
+
+                            <button class="btn btn-outline-light text-light m-1" onclick="SubmitDislikeOnReply(@r.Id,'@User.Identity.Name')" id="dislikereply-@r.Id">
+                                <i id="dislikeIcon-@User.Identity.Name" class="fa-regular fa-thumbs-down"></i>
+                                <p class="p-button" id="dislikesCount-@r.Id">
+                                    @Html.DisplayFor(m => r.DislikesCount)
+                                </p>
+                            </button>
+                            <button class=" btn btn-outline-light text-light m-1" onclick="AreaForReplyToReply(@r.Id)"> <i class="fa-regular fa-comment"></i> </button>
+                        </div>
+                    </div>
+                    
+                    
+                    @Html.Partial("~/Views/PostReply/_ReplyToReplyFormPartial.cshtml", (int)r.Id)
 
                     @if (r.Replies.Any())
                     {

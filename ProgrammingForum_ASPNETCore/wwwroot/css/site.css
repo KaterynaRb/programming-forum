@@ -14,18 +14,114 @@ html {
 }
 
 body {
+    height: 100%;
     margin-bottom: 60px;
+    background-color: darkgray;
+    background-image: url("/images/theme/bg-01.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    /*background-size: auto 100%;*/
+    background-size: cover;
 }
 
 header {
-    background-color: #8ee8ce;
+    background-color: rgba(28, 28, 28, 0.9);
+    /*background-color: rgba(42, 79, 77, 0.9);*/
 }
 
 footer {
-    background-color: #8ee8ce;
+    background-color: rgba(28, 28, 28, 0.6);
     padding: 5px;
+    color: lightgray;
 }
 
 .menu {
-    background-color: #8ee8ce;
+    background-color: rgba(28, 28, 28, 0.9);
 }
+
+.container-dark {
+    /*background-color: darkslategrey;*/
+    background-color: rgba(42, 79, 77, 0.7);
+}
+
+.input-search {
+    background-color: rgba(131, 156, 154, 0.4);
+}
+
+.input-search::placeholder {
+    color: darkgrey;
+    font-weight: 600;
+}
+
+.card {
+    background-color: rgba(42, 79, 77, 0.4);
+}
+
+main {
+    /*background-color: rgba(131, 156, 154, 0.4);*/
+    background-color: rgba(28, 28, 28, 0.9);
+    margin: 0 auto;
+}
+
+.navbar-nav > li {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.choose-post:hover {
+    /*background-color: rgba(42, 79, 77, 0.4);*/
+    background-color: rgba(131, 156, 154, 0.4);
+}
+
+.choose-post {
+    margin: 0;
+    padding: 10px;
+}
+
+.table-posts {
+    margin: 0;
+    padding: 10px;
+    font-weight: 600;
+    border-bottom: medium groove white;
+}
+
+.p-button {
+    display: inline;
+}
+
+.q-content, .q-author {
+    border-bottom: medium groove white;
+    border-top: medium groove white;
+}
+
+.btn-outline-light:hover, .btn-outline-light:focus, .btn-outline-light:active, .btn-outline-light.active {
+    color: #fff;
+    /*background-color: darkslategrey;*/
+    background-color: rgba(131, 156, 154, 0.4);
+    border-color: lightgray;
+}
+
+.btn-secondary {
+    background-color: rgba(131, 156, 154, 0.4);
+}
+
+.reply {
+    border-top: thin groove white;
+}
+
+.comment{
+    margin-block: 20px;
+    padding-block: 10px;
+    background-color:dimgray;
+}
+
+
+
+/*input[type="file"] {
+    display: none;
+}
+
+label {
+    cursor: pointer;
+}*/

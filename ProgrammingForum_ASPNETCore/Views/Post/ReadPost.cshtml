@@ -9,74 +9,59 @@
 }
 
 <div>
-    <h4>Post</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+    
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
+    <div class="container mt-3">
+        <div class="col-7 offset-md-1 text-light mt-4">
+            <h5>@Html.DisplayFor(model => model.Description)</h5>
+        </div>
+        <div class="row justify-content-evenly">
+            
+            <div class="col-7 text-light q-content py-3">
+                @Html.DisplayFor(model => model.Content)
+            </div>
+            <div class="col-2 text-light q-author  py-3">
+                <label> Asked: </label>
+                @Html.DisplayFor(model => model.CreatedDate)
 
-        <dd>
-            @Html.DisplayFor(model => model.Content)
-        </dd>
+                <label> Author: </label>
+                @{
+                    if (Model.AuthorPicture != null)
+                    {
+                        string imageBase64 = Convert.ToBase64String(Model.AuthorPicture);
+                        string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                        <img src="@imageSrc" width="100" height="100" />
+                    }
+                }
+                @Html.DisplayFor(model => model.AuthorName)
+            </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AuthorName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AuthorName)
-        </dd>
-
-        @{
-            if (Model.AuthorPicture != null)
-            {
-                string imageBase64 = Convert.ToBase64String(Model.AuthorPicture);
-                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
-                <img src="@imageSrc" width="100" height="100" />
-            }
-        }
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        <dd>
-            <button class=" btn btn-outline-secondary" onclick="SubmitLike(@Model.Id,'@User.Identity.Name')" id="likepost-@Model.Id">
-                <i id="likeIcon-@User.Identity.Name" class="@liked fa-thumbs-up"></i>
-                <p id="likesCount-@Model.Id">
+        </div>
+        <div class="col-7 offset-md-1 mt-4">
+                <button class="btn btn-lg btn-outline-light text-light" onclick="SubmitLike(@Model.Id,'@User.Identity.Name')" id="likepost-@Model.Id">
+                    <i id="likeIcon-@User.Identity.Name" class="@liked fa-thumbs-up"></i>
+                    <p class="p-button" id="likesCount-@Model.Id">
                     @Html.DisplayFor(model => model.LikesCount)
-                </p>
-            </button>
+                    </p>
+                </button>
 
-            <button class=" btn btn-outline-secondary" onclick="SubmitDislike(@Model.Id,'@User.Identity.Name')" id="dislikepost-@Model.Id">
-                <i id="dislikeIcon-@User.Identity.Name" class="@disliked fa-thumbs-down"></i>
-                <p id="dislikesCount-@Model.Id">
+                <button class="btn btn-lg btn-outline-light text-light" onclick="SubmitDislike(@Model.Id,'@User.Identity.Name')" id="dislikepost-@Model.Id">
+                    <i id="dislikeIcon-@User.Identity.Name" class="@disliked fa-thumbs-down"></i>
+                    <p class="p-button" id="dislikesCount-@Model.Id">
                     @Html.DisplayFor(model => model.DislikesCount)
-                </p>
-            </button>
-        </dd>
-
-    </dl>
+                    </p>
+                </button>
+        </div>
+        <div id="createreply" class="col-7 offset-md-1">
+            @await Html.PartialAsync("~/Views/PostReply/_ReplyFormPartial.cshtml", new PostReplyCreateModel { PostId = Model.Id, AuthorName = User.Identity.Name})
+        </div>
+    </div>
 </div>
 
-<div id="createreply" class="col-md-4">
-    @await Html.PartialAsync("~/Views/PostReply/_ReplyFormPartial.cshtml", new PostReplyCreateModel { PostId = Model.Id, AuthorName = User.Identity.Name})
-</div>
 
-<div id="replies">
+<div id="replies" class="col-8 offset-md-1">
     @await Html.PartialAsync("~/Views/PostReply/_PostRepliesPartial.cshtml", Model.PostReplies)
 </div>
 

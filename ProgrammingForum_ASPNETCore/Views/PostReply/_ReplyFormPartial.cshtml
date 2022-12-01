@@ -1,29 +1,30 @@
 ﻿@model ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyCreateModel
 
 
-@using (Html.BeginForm("CreatePostReply", "PostReply", FormMethod.Post, new { @id = "formreply" }))
-{
-    <div class="form-horizontal">
-
-        <div class="form-group">
-            <label>Create PostReply</label>
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => Model.ContentReply, new { @class = "form-control", rows="1"})
-                @Html.ValidationMessageFor(model => Model.ContentReply, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => Model.PostId)
-                @Html.HiddenFor(model => Model.AuthorName)
-            </div>
-        </div>
-
+<div class="pt-2">
+    @using (Html.BeginForm("CreatePostReply", "PostReply", FormMethod.Post, new { @id = "formreply" }))
+    {
         <hr />
-        <div class="form-group">
-            <div class="col-md-offset-2">
-                <p>@ViewBag.Message</p>
-                <button type="button" class="btn btn-secondary" onclick="SubmitReply()"> Reply </button>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <h5 class="text-light">Your Answer</h5>
+                <div class="col-md-12">
+                    @Html.TextAreaFor(model => Model.ContentReply, new { @class = "form-control", rows="2"})
+                    @Html.ValidationMessageFor(model => Model.ContentReply, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => Model.PostId)
+                    @Html.HiddenFor(model => Model.AuthorName)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-1">
+                    <p>@ViewBag.Message</p>
+                    <button type="button" class="btn btn-secondary" onclick="SubmitReply()"> Reply </button>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
 
 <script>
 

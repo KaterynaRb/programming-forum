@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="~/ProgrammingForum_ASPNETCore.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
+    <header class="sticky-top">
         <nav class="navbar nav-tabs navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand text-dark" asp-area="" asp-controller="Home" asp-action="Index">Programmers Space</a>
+                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">Programmers Space</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,17 +21,17 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="CreatePost">Create Post</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Post" asp-action="CreatePost">Ask question</a>
                         </li>
                         <li class="nav-item">
                             <form asp-action="SearchPosts" asp-controller="Post" method="get">
                                 <div class="input-group">
-                                    <input type="text" name="SearchString" class="form-control" placeholder="Search for..." value="@ViewData["CurrentFilter"]" />
+                                    <input type="text" name="SearchString" class="input-search form-control" placeholder="Search for..." value="@ViewData["CurrentFilter"]" />
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default navbar-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                        <button class="btn btn-default navbar-btn" type="submit"><i class="fa-solid fa-magnifying-glass text-light"></i></button>
                                     </span>
                                 </div>
                             </form>
@@ -40,12 +40,12 @@
                         {
                             <li class="nav-item">
                                 <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-default dropdown-toggle text-light" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Edit Forum
                                     </button>
                                     <div class="dropdown-menu menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" asp-controller="User" asp-action="AllUsers">Users</a>
-                                        <a class="dropdown-item" asp-controller="Topic" asp-action="AllTopics">Topics</a>
+                                        <a class="dropdown-item text-light" asp-controller="User" asp-action="AllUsers">Users</a>
+                                        <a class="dropdown-item text-light" asp-controller="Topic" asp-action="AllTopics">Topics</a>
                                     </div>
                                 </div>
                             </li>
@@ -56,7 +56,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container justify-content-center">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -64,7 +64,7 @@
 
     <footer class="border-top footer fixed-bottom">
         <div class="container">
-            &copy; 2022 - Programmers Space <a asp-area="" asp-controller="Home" asp-action="Privacy"></a>
+            &copy; 2022 - Programmers Space
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

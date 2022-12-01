@@ -1,67 +1,76 @@
 ﻿@model ProgrammingForum_ASPNETCore.Models.UserModels.UserCreateModel
 
-<h3>Register</h3>
+<div class="text-center text-light">
+    <h2> Create account </h2>
+</div>
 <hr />
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div class="form-horizontal">
+<div class="d-flex justify-content-center">
+    <div class="text-center">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-horizontal">
 
-        <p class="red">@ViewBag.UserExists</p>
+                <p class="red">@ViewBag.UserExists</p>
 
-        <div class="form-group">
-            <label>Username</label>
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @placeholder="Username" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 pt-2">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder="Email"} })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 pt-2">
+                        @Html.EditorFor(model => model.ConfirmEmail, new { htmlAttributes = new { @class = "form-control", @placeholder="Confirm Email"} })
+                        @Html.ValidationMessageFor(model => model.ConfirmEmail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 pt-2">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type="password", @placeholder="Create password"} })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 pt-2">
+                        @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @type="password", @placeholder="Confirm Password"} })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 pt-2">
+                        <label class="text-light"> Add picture </label>
+                        <input type="file" accept="image/png, image/jpg, image/gif, image/jpeg" name="File" />
+                        @*<label class="text-light" for="inputTag">
+                            Add picture
+                            <i class="fa fa-2x fa-camera"></i>
+                            <input id="inputTag" accept="image/png, image/jpg, image/gif, image/jpeg" name="File" type="file" />
+                            <br />
+                            <span id="imageName"></span>
+                        </label>*@
+                    </div>
+                </div>
+
+                <hr />
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <p>@ViewBag.ImageError</p>
+                        <input type="submit" value="Create account" class="btn btn-secondary" />
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label>Email</label>
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Confirm Email</label>
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.ConfirmEmail, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ConfirmEmail, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label> Create password </label>
-            <div class="col-md-4">
-                @Html.PasswordFor(model => model.Password)<br>
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label> Confirm password </label>
-            <div class="col-md-4">
-                @Html.PasswordFor(model => model.ConfirmPassword)<br>
-                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label> Add picture </label>
-            <div class="col-md-4">
-                <input type="file" name="File" />
-            </div>
-        </div>
-
-        <hr />
-        <div class="form-group">
-            <div class="col-md-offset-2">
-                <p>@ViewBag.ImageError</p>
-                <input type="submit" value="Create account" class="btn btn-secondary" />
-            </div>
-        </div>
+        }
     </div>
-}
+</div>
+

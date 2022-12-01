@@ -11,12 +11,19 @@
     <h1 class="display-4"> @ViewLocalizer["Welcome"] </h1>
 </div>
 
-<div>
+<div class="row d-flex justify-content-around">
     @if (Model != null)
     {
         @foreach (ProgrammingForum_ASPNETCore.Models.TopicModels.TopicViewModel topic in Model)
         {
-            <p>@Html.ActionLink(topic.Name, "Posts", "Topic", new {id = topic.Id}) </p>
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top">
+                    <div class="card-body">
+                        <p class="card-text">@Html.ActionLink(topic.Name, "Posts", "Topic", new {id = topic.Id}) </p>
+                    </div>
+                </div>
+            </div>
         }
     }
 </div>
