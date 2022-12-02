@@ -1,4 +1,5 @@
 using BLL;
+using BLL.Services;
 using DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -27,8 +28,12 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddWebOptimizer();
 
 // Add Service from BLL //
-builder.Services.AddScoped<IPost, PostService>();
-builder.Services.AddScoped<ITopic, TopicService>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ITopicService, TopicService>();
+builder.Services.AddScoped<IPostReplyService, PostReplyService>();
+builder.Services.AddScoped<ILikeService, LikeService>();
+builder.Services.AddScoped<IDislikeService, DislikeService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddViewLocalization();

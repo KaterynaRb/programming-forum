@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL;
 using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -11,33 +12,27 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 {
     public class PostReplyController : Controller
     {
-        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public PostReplyController(AppDbContext context, IMapper mapper)
+        private readonly IPostReplyService _postReplyService;
+        public PostReplyController(IMapper mapper, IPostReplyService postReplyService)
         {
-            _context = context;
             _mapper = mapper;
+            _postReplyService = postReplyService;
         }
 
-
-        //[Authorize]
+        [Authorize]
         [HttpPost]
-        public IActionResult CreateReplyToReply(int parentId, string contentReply)
+        public async Task<IActionResult> CreateReplyToReply(int parentId, string contentReply)
         {
             PostReplyCreateModel replyCreateModel = new PostReplyCreateModel();
-            replyCreateModel.AuthorName = User.Identity.Name; //redirect to login
-            replyCreateModel.ParentReplyId = parentId;
+            replyCreateModel.AuthorName = User.Identity.Name;
             replyCreateModel.ContentReply = contentReply;
-            replyCreateModel.PostId = _context.PostReplies.Where(p => p.Id == parentId).FirstOrDefault().PostId;
 
             var postReply = _mapper.Map<PostReply>(replyCreateModel);
+            await _postReplyService.AddReplyToReply(postReply, parentId);
 
-            _context.PostReplies.Add(postReply);
-            _context.SaveChanges();
-
-
-            List<PostReply> postReplies = _context.PostReplies.Where(pr => pr.PostId == postReply.PostId).ToList();
-            List<PostReplyViewModel> repliesView = new List<PostReplyViewModel>();
+            List<PostReply> postReplies = _postReplyService.GetByPostId(postReply.PostId).ToList();
+            List <PostReplyViewModel> repliesView = new List<PostReplyViewModel>();
             foreach (var reply in postReplies)
             {
                 if (reply.ParentReplyId == null)
@@ -46,24 +41,18 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                     repliesView.Add(replyView);
                 }
             }
-
             return PartialView("_PostRepliesPartial", repliesView);
         }
 
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
-        public IActionResult CreatePostReply(PostReplyCreateModel replyCreateModel)
+        public async Task<IActionResult> CreatePostReply(PostReplyCreateModel replyCreateModel)
         {
-            //replyCreateModel.AuthorName = User.Identity.Name; //redirect to login
-
             var postReply = _mapper.Map<PostReply>(replyCreateModel);
+            await _postReplyService.AddReplyToPost(postReply);
 
-            _context.PostReplies.Add(postReply);
-            _context.SaveChanges();
-
-
-            List<PostReply> postReplies = _context.PostReplies.Where(pr => pr.PostId == postReply.PostId).ToList();
+            List<PostReply> postReplies = _postReplyService.GetByPostId(postReply.PostId).ToList();
             List<PostReplyViewModel> repliesView = new List<PostReplyViewModel>();
             foreach (var reply in postReplies)
             {
@@ -73,7 +62,6 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                     repliesView.Add(replyView);
                 }
             }
-
             return PartialView("_PostRepliesPartial", repliesView);
         }
     }

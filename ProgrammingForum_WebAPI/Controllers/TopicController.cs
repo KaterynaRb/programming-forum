@@ -19,8 +19,7 @@ namespace ProgrammingForum_WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IList<Topic>>> Get()
         {
-            //return _context.Topics.Include(topic => topic.Posts).ThenInclude(post => post.Author);
-            var topics = await _context.Topics/*.Include(topic => topic.Posts)*/.ToListAsync();
+            var topics = await _context.Topics.ToListAsync();
             if (topics.Count == 0)
             {
                 return NotFound();
@@ -33,7 +32,7 @@ namespace ProgrammingForum_WebAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<Topic> Get(int id)
         {
-            var topic =  _context.Topics.Include(topic => topic.Posts).Where(topic => topic.Id == id).First(); //.FirstOrDefaultAsync(id);
+            var topic =  _context.Topics.Include(topic => topic.Posts).Where(topic => topic.Id == id).First();
             if (topic == null)
             {
                 return NotFound();

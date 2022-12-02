@@ -12,15 +12,20 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 {
     public class PostController : Controller
     {
-        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPost _postService;
+        private readonly IPostService _postService;
+        private readonly IPostReplyService _postReplyService;
+        private readonly ILikeService _likeService;
+        private readonly IDislikeService _dislikeService;
 
-        public PostController(AppDbContext context, IMapper mapper, IPost postService)
+        public PostController(IMapper mapper, IPostService postService,
+            IPostReplyService postReplyService, ILikeService likeService, IDislikeService dislikeService)
         {
-            _context = context;
             _mapper = mapper;
             _postService = postService;
+            _postReplyService = postReplyService;
+            _likeService = likeService;
+            _dislikeService = dislikeService;
         }
 
         [Authorize]
@@ -31,47 +36,37 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreatePost(PostCreateModel postModel)
+        public async Task<IActionResult> CreatePost(PostCreateModel postModel)
         {
             if (postModel.Description == null || postModel.Content == null )
             {
                 ViewBag.Message = "Description and content fields must be filled";
                 return View();
             }
-
             postModel.AuthorName = User.Identity.Name;
 
             var post = _mapper.Map<Post>(postModel);
-
-            _context.Posts.Add(post);
-            _context.SaveChanges();
+            await _postService.Add(post);
 
             int postId = post.Id;
-
             return RedirectToAction("ReadPost", new {id = postId});
         }
 
         public IActionResult ReadPost(int id)
         {
-            var post = _context.Posts.Where(p => p.Id == id).FirstOrDefault();
+            var post = _postService.GetById(id);
+            var postView = _mapper.Map<PostViewModel>(post);
 
-            var postView = _mapper.Map<PostViewModel>(post); //
-
-            if (_context.Likes.Find(User.Identity.Name, post.Id) != null) ViewData["liked"] = true;
+            if (_likeService.GetById(User.Identity.Name, post.Id) != null) ViewData["liked"] = true;
             else ViewData["liked"] = false;
 
-            if (_context.Dislikes.Find(User.Identity.Name, post.Id) != null) ViewData["disliked"] = true;
+            if (_dislikeService.GetById(User.Identity.Name, post.Id) != null) ViewData["disliked"] = true;
             else ViewData["disliked"] = false;
 
-            //PostReplyCreateModel model = new PostReplyCreateModel();
-            //model.PostId = post.Id;
-
-            //postView.replyCreateModel = model;
-
             List<PostReplyViewModel> replyViews = new List<PostReplyViewModel>();
-            List<PostReply> replies = _context.PostReplies.Where(pr => pr.PostId == post.Id).ToList();
+            List<PostReply> replies = _postReplyService.GetByPostId(post.Id).ToList();
 
-            foreach(var r in replies)
+            foreach (var r in replies)
             {
                 if (r.ParentReplyId == null)
                 {
@@ -80,7 +75,6 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                 }
             }
             postView.PostReplies = replyViews;
-
             return View(postView);
         }
 
@@ -96,7 +90,6 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             IEnumerable<Post> allposts;
             int totalPages;
 
-            //searchString = ViewData["CurrentFilter"].ToString();
             if (!String.IsNullOrEmpty(searchString))
             {
                 posts = _postService.GetPostsGlobalSearch(searchString, pageNumber, pageSize);
@@ -105,9 +98,8 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             }
             else
             {
-                return View(); // Search is empty
+                return View();
             }
-
 
             ViewData["prevDisabled"] = !(pageNumber > 1) ? "disabled" : "";
             ViewData["nextDisabled"] = !(pageNumber < totalPages) ? "disabled" : "";

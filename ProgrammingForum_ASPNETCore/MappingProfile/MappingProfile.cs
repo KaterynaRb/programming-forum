@@ -17,8 +17,6 @@ namespace ProgrammingForum_ASPNETCore.MappingProfile
 
             CreateMap<Topic, TopicViewModel>().ReverseMap();
 
-            //CreateMap<Post, PostListingModel>().ReverseMap();
-
             CreateMap<Post, PostListingModel>()
                 .ForMember(
                 dest => dest.AuthorName,
@@ -61,8 +59,6 @@ namespace ProgrammingForum_ASPNETCore.MappingProfile
                 dest => dest.AuthorName,
                 opt => opt.MapFrom(src => src.UserId))
                 .ReverseMap();
-
-            //CreateMap<PostReplyViewModel, PostReplyCreateModel>().ReverseMap();
         }
     }
 }

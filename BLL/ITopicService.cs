@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL
+namespace BLL
 {
-    public interface ITopic
+    public interface ITopicService
     {
         Topic GetById(int id);
         IEnumerable<Topic> GetAll();
 
-        Task Create(Topic post);
+        Task Add(Topic post);
         Task Delete(int id);
         Task UpdateTopicName(int id, string newName);
     }

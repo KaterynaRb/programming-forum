@@ -15,8 +15,6 @@ namespace ProgrammingForum_ASPNETCore.Models.PostModels
         [Display(Name = "Detailed description")]
         public string Content { get; set; }
         public DateTime CreatedDate { get; set; }
-        //public int LikesCount { get; set; }
-        //public int DislikesCount { get; set; }
         public string AuthorName { get; set; }
         public string? Topic { get; set; }
 

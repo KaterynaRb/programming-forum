@@ -15,8 +15,6 @@ namespace ProgrammingForum_ASPNETCore.Models.PostModels
         public string AuthorName { get; set; }
         public byte[] AuthorPicture { get; set; }
         public Topic? Topic { get; set; }
-
-        //public PostReplyCreateModel replyCreateModel { get; set; }
         public IEnumerable<PostReplyViewModel> PostReplies { get; set; }
     }
 }

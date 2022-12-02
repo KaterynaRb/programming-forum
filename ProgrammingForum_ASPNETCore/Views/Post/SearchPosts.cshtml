@@ -8,16 +8,9 @@
         {
             <p>@Html.DisplayFor(m => post.Description) </p>
             <p>@Html.DisplayFor(m => post.AuthorName) </p>
-
-            @*<p>@Html.ActionLink(post.Description, "", "") </p>*@
         }
     }
 </div>
-
-@*@{
-    var prevDisabled = ViewData["prevDisabled"];
-    var nextDisabled = ViewData["nextDisabled"];
-}*@
 
 <a asp-action="SearchPosts"
    asp-route-page="@((int)ViewData["pageIndex"] - 1)"

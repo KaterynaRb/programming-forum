@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using BLL;
 using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProgrammingForum_ASPNETCore.Models.TopicModels;
 using ProgrammingForum_ASPNETCore.Models.UserModels;
 
 namespace ProgrammingForum_ASPNETCore.Controllers
@@ -11,39 +11,45 @@ namespace ProgrammingForum_ASPNETCore.Controllers
     public class UserController : Controller
     {
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public UserController(IMapper mapper)
+        public UserController(IMapper mapper, IUserService userService)
         {
             _mapper = mapper;
+            _userService= userService;
         }
+
+
+        [Authorize]
+        public IActionResult UserPage()
+        {
+            User user = _userService.GetById(User.Identity.Name);
+
+            if (user != null)
+            {
+                var usermap = _mapper.Map<UserViewModel>(user);
+                return View(usermap);
+            }
+            return View("Error");
+        }
+
+        [Authorize]
+        public IActionResult EditUser()
+        {
+            return View();
+        }
+
+        //[Authorize]
+        //[HttpPost]
+        //public async Task<IActionResult> EditUser(UserEditModel userEdit, IFormFile file)
+        //{
+        //}
 
 
         [Authorize(Roles = "Admin")]
         public IActionResult AllUsers()
         {
-            IEnumerable<User> users = null;
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:54962/api/");
-                //HTTP GET
-                var responseTask = client.GetAsync("User");
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadFromJsonAsync<IEnumerable<User>>();
-                    readTask.Wait();
-                    users = readTask.Result;
-                }
-                else //web api sent error response 
-                {
-                    //log response status here..
-                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-                }
-            }
-
+            IEnumerable<User> users = _userService.GetAll();
             var userViews = _mapper.Map<IEnumerable<UserViewModel>>(users);
             return View(userViews);
         }

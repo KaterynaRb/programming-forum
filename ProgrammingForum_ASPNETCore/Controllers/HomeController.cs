@@ -11,43 +11,18 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly ITopic _topicService;
+        private readonly ITopicService _topicService;
         private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger, IMapper mapper, ITopic topicService)
+        public HomeController(IMapper mapper, ITopicService topicService)
         {
-            _logger = logger;
             _topicService = topicService;
             _mapper = mapper;
         }
 
         public IActionResult Index()
         {
-            //var topics = _topicService.GetAll(); //
-            IEnumerable<Topic> topics = null;
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:54962/api/");
-                //HTTP GET
-                var responseTask = client.GetAsync("Topic");
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadFromJsonAsync<IEnumerable<Topic>>();
-                    readTask.Wait();
-                    topics = readTask.Result;
-                }
-                else //web api sent error response 
-                {
-                    //log response status here..
-                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-                }
-            }
-
+            IEnumerable<Topic> topics = _topicService.GetAll();
             var topicViews = _mapper.Map<IEnumerable<TopicViewModel>>(topics);
             return View(topicViews);
         }

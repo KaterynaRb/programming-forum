@@ -1,0 +1,134 @@
+﻿@model ProgrammingForum_ASPNETCore.Models.UserModels.UserViewModel
+
+<div>
+    <h4 class="text-light">UserInfo</h4>
+    <hr />
+    <dl class="dl-horizontal text-light">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RegisteredDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegisteredDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Picture)
+        </dt>
+
+        <dd>
+            @{
+                if (Model.Picture != null)
+                {
+                    string imageBase64 = Convert.ToBase64String(Model.Picture);
+                    string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                    <img src="@imageSrc" width="200" height="200" />
+                }
+            }
+        </dd>
+
+    </dl>
+</div>
+
+<div>
+    <table class="table text-light">
+        <tr>
+            <th>
+                <p> Description </p>
+            </th>
+            <th>
+                <p> CreatedDate </p>
+            </th>
+            <th>
+                <p> LikesCount </p>
+            </th>
+            <th>
+                <p> DisikesCount </p>
+            </th>
+        </tr>
+
+    @foreach (var item in Model.Posts)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LikesCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DislikesCount)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id })
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+    }
+    </table>
+</div>
+
+
+<div>
+    <table class="table text-light">
+        <tr>
+            <th>
+                <p> Reply content </p>
+            </th>
+            <th>
+                <p> CreatedDate </p>
+            </th>
+            <th>
+                <p> LikesCount </p>
+            </th>
+            <th>
+                <p> DisikesCount </p>
+            </th>
+        </tr>
+
+        @foreach (var item in Model.PostReplies)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LikesCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DislikesCount)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id })
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

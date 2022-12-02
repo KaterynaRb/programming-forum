@@ -11,18 +11,19 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using ProgrammingForum_ASPNETCore.Models.UserModels;
 using System.Security;
 using System.Runtime.InteropServices;
+using BLL;
 
 namespace ProgrammingForum_ASPNETCore.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public AccountController(AppDbContext context, IMapper mapper)
+        public AccountController(IMapper mapper, IUserService userService)
         {
-            _context = context;
             _mapper = mapper;
+            _userService = userService;
         }
         public IActionResult Login()
         {
@@ -32,12 +33,12 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string userName, string password, string ReturnUrl)
         {
-            var user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+            var user = _userService.GetById(userName);
             if (user != null)
             {
                 byte[] salt = user.PasswordSalt;
 
-                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2( // as char array
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                     password: password!,
                     salt: salt,
                     prf: KeyDerivationPrf.HMACSHA256,
@@ -128,12 +129,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                     }
                 }
 
-                // check if user with given email/username exists
-                //
-                var findUser = _context.Users
-                    .Where(u => u.UserName == userCreate.UserName
-                    || u.Email == userCreate.Email).FirstOrDefault();
-
+                var findUser = _userService.GetByIdAndEmail(userCreate.UserName, userCreate.Email);
                 if (findUser != null)
                 {
                     ViewBag.UserExists = "Username or email already exists";
@@ -141,8 +137,6 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                 }
 
                 var usermap = _mapper.Map<User>(userCreate);
-
-                // Hash password
 
                 byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
 
@@ -156,19 +150,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                 usermap.HashedPassword = hashed;
                 usermap.PasswordSalt = salt;
 
-                //using (var client = new HttpClient())
-                //{
-                //    client.BaseAddress = new Uri("http://localhost:44362/api/");
-
-                //    //HTTP POST
-                //    var postTask = client.PostAsJsonAsync<User>("User", usermap);
-                //    postTask.Wait();
-                //    var result = postTask.Result;
-                //}
-
-
-                _context.Users.Add(usermap);
-                _context.SaveChanges();
+                _userService.Add(usermap);
 
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, usermap.UserName));
@@ -178,22 +160,9 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
                 await HttpContext.SignInAsync(claimsPrincipal);
 
-                return RedirectToAction("UserPage");
+                return RedirectToAction("UserPage", "User"); //
             }
             return View(userCreate);
-        }
-
-        [Authorize]
-        public IActionResult UserPage()
-        {
-            User user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
-
-            if (user != null)
-            {
-                var usermap = _mapper.Map<UserCreateModel>(user);
-                return View(usermap);
-            }
-            return View("Error");
         }
     }
 }
