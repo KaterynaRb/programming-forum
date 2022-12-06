@@ -9,8 +9,8 @@ namespace BLL
 {
     public interface IPostService
     {
-        Post GetById(int id);
-        IEnumerable<Post> GetAll();
+        Task<Post> GetById(int id);
+        Task<IEnumerable<Post>> GetAll();
 
         IEnumerable<Post> GetPostsByTopic(int id);
         IEnumerable<Post> GetPostsByTopic(int id, int pageNumber, int pageSize);
@@ -30,6 +30,7 @@ namespace BLL
         int GetRepliesCount(int id);
 
         Task Delete(int id);
+        Task UpdatePost(int id, Post post);
         Task UpdatePostDescription(int id, string newDescription);
         Task UpdatePostContent(int id, string newContent);
     }

@@ -20,9 +20,10 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<Topic> topics = _topicService.GetAll();
+            //var t =  await _topicService.GetAll();
+            IEnumerable<Topic> topics = await _topicService.GetAll();
             var topicViews = _mapper.Map<IEnumerable<TopicViewModel>>(topics);
             return View(topicViews);
         }

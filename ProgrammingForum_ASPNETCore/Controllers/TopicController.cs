@@ -22,9 +22,9 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult AllTopics()
+        public async Task<IActionResult> AllTopics()
         {
-            IEnumerable<Topic> topics = _topicService.GetAll();
+            IEnumerable<Topic> topics = await _topicService.GetAll();
             var topicViews = _mapper.Map<IEnumerable<TopicViewModel>>(topics);
             return View(topicViews);
         }

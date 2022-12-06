@@ -1,5 +1,6 @@
 ﻿using DAL;
 using DAL.Entities;
+using ForumApiClient;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 
@@ -8,30 +9,34 @@ namespace BLL.Services
     public class PostService : IPostService
     {
         private readonly AppDbContext _context;
+        private readonly Client _api;
         public PostService(AppDbContext context)
         {
             _context = context;
+            _api = new Client("http://localhost:54962", new HttpClient());
         }
 
         public async Task Add(Post post)
         {
-            _context.Posts.Add(post);
-            await _context.SaveChangesAsync();
+            await _api.PostPOSTAsync(post);
+            //_context.Posts.Add(post);
+            //await _context.SaveChangesAsync();
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _api.PostDELETEAsync(id);
         }
 
-        public IEnumerable<Post> GetAll()
+        public async Task<IEnumerable<Post>> GetAll()
         {
-            return _context.Posts.Include(post => post.PostReplies);
+            return await _api.PostAllAsync();
+            //return _context.Posts.Include(post => post.PostReplies);
         }
 
-        public Post GetById(int id)
+        public async Task<Post> GetById(int id)
         {
-            return _context.Posts.Where(p => p.Id == id).FirstOrDefault();
+            return await _api.PostGETAsync(id);
         }
 
         public int GetDislikesCount(int id)
@@ -57,29 +62,11 @@ namespace BLL.Services
 
         public IEnumerable<Post> GetPostsByTopic(int id)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:54962/api/Topic/");
-                //HTTP GET
-                var responseTask = client.GetAsync(id.ToString());
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadFromJsonAsync<Topic>();
-                    readTask.Wait();
-                    return readTask.Result.Posts;
-                }
-                else
-                {
-                    return _context.Topics
+            return _context.Topics
                         .Where(topic => topic.Id == id)
                         .First()
                         .Posts
-                        .OrderBy(x => x.Id); //and(!) date
-                }
-            }
+                        .OrderBy(x => x.CreatedDate);
         }
 
         public IEnumerable<Post> GetPostsGlobalSearch(string searchString)
@@ -135,6 +122,11 @@ namespace BLL.Services
             Post post = await _context.Posts.FindAsync(postId);
             post.LikesCount += value;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePost(int id, Post post)
+        {
+            await _api.PostPUTAsync(id, post);
         }
 
         public Task UpdatePostContent(int id, string newContent)

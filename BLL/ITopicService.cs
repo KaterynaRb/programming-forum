@@ -9,11 +9,10 @@ namespace BLL
 {
     public interface ITopicService
     {
-        Topic GetById(int id);
-        IEnumerable<Topic> GetAll();
-
-        Task Add(Topic post);
+        Task<Topic> GetById(int id);
+        Task<IEnumerable<Topic>> GetAll();
+        Task Add(Topic topic);
         Task Delete(int id);
-        Task UpdateTopicName(int id, string newName);
+        Task UpdateTopic(int id, Topic topic);
     }
 }

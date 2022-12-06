@@ -33,7 +33,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string userName, string password, string ReturnUrl)
         {
-            var user = _userService.GetById(userName);
+            var user = await _userService.GetById(userName);
             if (user != null)
             {
                 byte[] salt = user.PasswordSalt;

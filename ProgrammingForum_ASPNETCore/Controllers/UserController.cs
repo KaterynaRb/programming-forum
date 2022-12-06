@@ -21,9 +21,9 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
 
         [Authorize]
-        public IActionResult UserPage()
+        public async Task<IActionResult> UserPage()
         {
-            User user = _userService.GetById(User.Identity.Name);
+            User user = await _userService.GetById(User.Identity.Name);
 
             if (user != null)
             {
@@ -47,9 +47,9 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        public IActionResult AllUsers()
+        public async Task<IActionResult> AllUsers()
         {
-            IEnumerable<User> users = _userService.GetAll();
+            IEnumerable<User> users = await _userService.GetAll();
             var userViews = _mapper.Map<IEnumerable<UserViewModel>>(users);
             return View(userViews);
         }

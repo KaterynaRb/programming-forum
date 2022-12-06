@@ -9,10 +9,10 @@ namespace BLL
 {
     public interface IUserService
     {
-        User GetById(string id);
-        IEnumerable<User> GetAll();
+        Task<User> GetById(string id);
+        Task<IEnumerable<User>> GetAll();
 
-        User GetByIdAndEmail(string id, string email);
+        Task<User> GetByIdAndEmail(string id, string email);
 
         Task Add(User user);
         Task Delete(string id);

@@ -1,5 +1,6 @@
 ﻿using DAL;
 using DAL.Entities;
+using ForumApiClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,53 +15,37 @@ namespace BLL.Services
     public class TopicService : ITopicService
     {
         private readonly AppDbContext _context;
+        private readonly Client _api;
+
         public TopicService(AppDbContext context)
         {
             _context = context;
+            _api = new Client("http://localhost:54962", new HttpClient());
         }
 
-        public Task Add(Topic post)
+        public async Task Add(Topic topic)
         {
-            throw new NotImplementedException();
+            await _api.TopicPOSTAsync(topic);
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _api.TopicDELETEAsync(id);
         }
 
-        public IEnumerable<Topic> GetAll()
+        public async Task<IEnumerable<Topic>> GetAll()
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:54962/api/");
-                //HTTP GET
-                var responseTask = client.GetAsync("Topic");
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadFromJsonAsync<IEnumerable<Topic>>();
-                    readTask.Wait();
-                    return readTask.Result;
-                }
-                else
-                {
-                    return _context.Topics;
-                }
-            }
+            return await _api.TopicAllAsync();
         }
 
-        public Topic GetById(int id)
+        public async Task<Topic> GetById(int id)
         {
-            return _context.Topics.Find(id);
+            return await _api.TopicGETAsync(id);
         }
 
-        public Task UpdateTopicName(int id, string newName)
+        public async Task UpdateTopic(int id, Topic topic)
         {
-            throw new NotImplementedException();
+            await _api.TopicPUTAsync(id, topic);
         }
     }
 }
