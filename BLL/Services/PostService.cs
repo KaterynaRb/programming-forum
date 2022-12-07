@@ -55,7 +55,7 @@ namespace BLL.Services
                 .Where(topic => topic.Id == id)
                 .First()
                 .Posts
-                .OrderBy(x => x.Id) //and(!) date
+                .OrderByDescending(x => x.CreatedDate)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize);
         }
@@ -66,41 +66,45 @@ namespace BLL.Services
                         .Where(topic => topic.Id == id)
                         .First()
                         .Posts
-                        .OrderBy(x => x.CreatedDate);
+                        .OrderByDescending(x => x.CreatedDate);
         }
 
         public IEnumerable<Post> GetPostsGlobalSearch(string searchString)
         {
+            var normalizedSearch = searchString.ToLower();
             return _context.Posts
-                .Where(p => p.Description.Contains(searchString) ||
-                p.Content.Contains(searchString));
+                .Where(p => p.Description.ToLower().Contains(normalizedSearch) ||
+                p.Content.ToLower().Contains(normalizedSearch));
         }
 
         public IEnumerable<Post> GetPostsGlobalSearch(string searchString, int pageNumber, int pageSize)
         {
+            var normalizedSearch = searchString.ToLower();
             return _context.Posts
-                .Where(p => p.Description.Contains(searchString) ||
-                p.Content.Contains(searchString))
-                .OrderBy(x => x.Id) //and(!) date
+                .Where(p => p.Description.ToLower().Contains(normalizedSearch) ||
+                p.Content.ToLower().Contains(normalizedSearch))
+                .OrderByDescending(x => x.CreatedDate)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize); ;
         }
 
         public IEnumerable<Post> GetPostsInTopicSearch(int id, string searchString)
         {
+            var normalizedSearch = searchString.ToLower();
             return _context.Posts.Where(
                 p => p.TopicId == id &&
-                (p.Description.Contains(searchString) ||
-                p.Content.Contains(searchString)))
-                .OrderBy(x => x.Id); //and(!) date
+                (p.Description.ToLower().Contains(normalizedSearch) ||
+                p.Content.ToLower().Contains(normalizedSearch)))
+                .OrderByDescending(x => x.CreatedDate);
         }
         public IEnumerable<Post> GetPostsInTopicSearch(int id, string searchString, int pageNumber, int pageSize)
         {
+            var normalizedSearch = searchString.ToLower();
             return _context.Posts.Where(
                 p => p.TopicId == id &&
-                (p.Description.Contains(searchString) ||
-                p.Content.Contains(searchString)))
-                .OrderBy(x => x.Id) //and(!) date
+                (p.Description.ToLower().Contains(normalizedSearch) ||
+                p.Content.ToLower().Contains(normalizedSearch)))
+                .OrderByDescending(x => x.CreatedDate)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize);
         }

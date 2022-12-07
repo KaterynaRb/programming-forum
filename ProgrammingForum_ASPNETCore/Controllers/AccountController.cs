@@ -91,10 +91,10 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public async Task/*<IActionResult>*/ Logout()
         {
             await HttpContext.SignOutAsync();
-            return Redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:44350");
+            //return Redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:44350");
         }
 
 
