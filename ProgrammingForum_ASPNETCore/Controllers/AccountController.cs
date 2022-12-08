@@ -129,7 +129,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                     }
                 }
 
-                var findUser = _userService.GetByIdAndEmail(userCreate.UserName, userCreate.Email);
+                var findUser = await _userService.GetByIdAndEmail(userCreate.UserName, userCreate.Email);
                 if (findUser != null)
                 {
                     ViewBag.UserExists = "Username or email already exists";
@@ -150,7 +150,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                 usermap.HashedPassword = hashed;
                 usermap.PasswordSalt = salt;
 
-                _userService.Add(usermap);
+                await _userService.Add(usermap);
 
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, usermap.UserName));

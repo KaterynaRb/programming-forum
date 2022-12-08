@@ -22,21 +22,28 @@ namespace BLL.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(string userId, int itemId)
+        public async Task DeleteOnPost(string userId, int postId)
         {
-            Dislike dislike = await _context.Dislikes.FindAsync(userId, itemId);
+            Dislike dislike = _context.Dislikes.Where(l => l.UserId == userId && l.PostId == postId).FirstOrDefault();
+            _context.Dislikes.Remove(dislike);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteOnPostReply(string userId, int postReplyId)
+        {
+            Dislike dislike = _context.Dislikes.Where(l => l.UserId == userId && l.PostReplyId == postReplyId).FirstOrDefault();
             _context.Dislikes.Remove(dislike);
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Dislike> GetAll()
+        public Dislike GetByPostAndUser(string userId, int postId)
         {
-            throw new NotImplementedException();
+            Dislike dislike = _context.Dislikes.Where(l => l.UserId == userId && l.PostId == postId).FirstOrDefault();
+            return dislike;
         }
-
-        public Dislike GetById(string userId, int itemId)
+        public Dislike GetByPostReplyAndUser(string userId, int postReplyId)
         {
-            return _context.Dislikes.Find(userId, itemId);
+            Dislike dislike = _context.Dislikes.Where(l => l.UserId == userId && l.PostReplyId == postReplyId).FirstOrDefault();
+            return dislike;
         }
     }
 }

@@ -9,9 +9,10 @@ namespace BLL
 {
     public interface IDislikeService
     {
-        Dislike GetById(string userId, int itemId);
-        IEnumerable<Dislike> GetAll();
+        Dislike GetByPostAndUser(string userId, int postId);
+        Dislike GetByPostReplyAndUser(string userId, int postReplyId);
         Task Add(Dislike dislike);
-        Task Delete(string userId, int itemId);
+        Task DeleteOnPost(string userId, int postId);
+        Task DeleteOnPostReply(string userId, int postReplyId);
     }
 }

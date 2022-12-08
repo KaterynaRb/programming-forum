@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProgrammingForum_WebAPI", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9E6CC4C9-4B8A-4B61-868B-73339BC6547D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumTests", "ForumTests\ForumTests.csproj", "{53562EAA-F591-47D4-9C43-233A0FBF0D12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForumTests", "ForumTests\ForumTests.csproj", "{53562EAA-F591-47D4-9C43-233A0FBF0D12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

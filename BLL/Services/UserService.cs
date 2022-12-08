@@ -48,9 +48,10 @@ namespace BLL.Services
 
         public async Task<User> GetByIdAndEmail(string id, string email)
         {
-            return await _context.Users
+            User user =  await _context.Users
                     .Where(u => u.UserName == id
                     || u.Email == email).FirstOrDefaultAsync();
+            return user;
         }
 
         public async Task Update(string id, User user)

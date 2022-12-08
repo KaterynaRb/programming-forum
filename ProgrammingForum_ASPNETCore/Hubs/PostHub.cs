@@ -14,27 +14,28 @@ namespace ProgrammingForum_ASPNETCore.Hubs
         private readonly ILikeService _likeService;
         private readonly IDislikeService _dislikeService;
         private readonly IPostService _postService;
+        private readonly IPostReplyService _postReplyService;
 
-        public PostHub(ILikeService likeService, IDislikeService dislikeService, IPostService postService)
+        public PostHub(ILikeService likeService, IDislikeService dislikeService, IPostService postService, IPostReplyService postReplyService)
         {
             _likeService = likeService;
             _dislikeService = dislikeService;
             _postService = postService;
+            _postReplyService= postReplyService;
         }
 
         public async Task UpdateLikes(int postId, string userId)
         {
             bool liked;
-            //add or remove like to db (remove if exists)
-            if (_likeService.GetById(userId, postId) != null)
+            if (_likeService.GetByPostAndUser(userId, postId) != null)
             {
-                await _likeService.Delete(userId, postId);
+                await _likeService.DeleteOnPost(userId, postId);
                 await _postService.UpdateLikesCount(postId, -1);
                 liked = false;
             }
             else
             {
-                if (_dislikeService.GetById(userId, postId) != null)
+                if (_dislikeService.GetByPostAndUser(userId, postId) != null)
                 {
                     await UpdateDislikes(postId, userId);
                 }
@@ -53,16 +54,15 @@ namespace ProgrammingForum_ASPNETCore.Hubs
         public async Task UpdateDislikes(int postId, string userId)
         {
             bool disliked;
-            //add or remove dislike to db (remove if exists)
-            if (_dislikeService.GetById(userId, postId) != null)
+            if (_dislikeService.GetByPostAndUser(userId, postId) != null)
             {
-                await _dislikeService.Delete(userId, postId);
+                await _dislikeService.DeleteOnPost(userId, postId);
                 await _postService.UpdateDislikesCount(postId, -1);
                 disliked = false;
             }
             else
             {
-                if (_likeService.GetById(userId, postId) != null)
+                if (_likeService.GetByPostAndUser(userId, postId) != null)
                 {
                     await UpdateLikes(postId, userId);
                 }
@@ -77,5 +77,21 @@ namespace ProgrammingForum_ASPNETCore.Hubs
             await Clients.All.SendAsync("UpdateDislikesInPage", totalDislikes, postId, disliked, userId);
         }
 
+
+        public async Task UpdateLikesOnReply(int postId, int postreplyId, string userId)
+        {
+            int totalLikes = 1;
+            bool liked = true;
+
+            await Clients.All.SendAsync("UpdateLikesOnReplyInPage", totalLikes, postId, postreplyId, liked, userId);
+        }
+
+        public async Task UpdateDislikesOnReply(int postId, int postreplyId, string userId)
+        {
+            int totalDislikes = 1;
+            bool disliked = true;
+
+            await Clients.All.SendAsync("UpdateDislikesOnReplyInPage", totalDislikes, postId, postreplyId, disliked, userId);
+        }
     }
 }

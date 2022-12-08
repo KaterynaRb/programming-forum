@@ -9,9 +9,10 @@ namespace BLL
 {
     public interface ILikeService
     {
-        Like GetById(string userId, int itemId);
-        IEnumerable<Like> GetAll();
+        Like GetByPostAndUser(string userId, int postId);
+        Like GetByPostReplyAndUser(string userId, int postReplyId);
         Task Add(Like like);
-        Task Delete(string userId, int itemId);
+        Task DeleteOnPost(string userId, int postId);
+        Task DeleteOnPostReply(string userId, int postReplyId);
     }
 }

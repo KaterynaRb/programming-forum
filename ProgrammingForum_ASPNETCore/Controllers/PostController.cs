@@ -52,15 +52,15 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             return RedirectToAction("ReadPost", new {id = postId});
         }
 
-        public IActionResult ReadPost(int id)
+        public async Task<IActionResult> ReadPost(int id)
         {
-            var post = _postService.GetById(id);
+            var post = await _postService.GetById(id);
             var postView = _mapper.Map<PostViewModel>(post);
 
-            if (_likeService.GetById(User.Identity.Name, post.Id) != null) ViewData["liked"] = true;
+            if (_likeService.GetByPostAndUser(User.Identity.Name, post.Id) != null) ViewData["liked"] = true;
             else ViewData["liked"] = false;
 
-            if (_dislikeService.GetById(User.Identity.Name, post.Id) != null) ViewData["disliked"] = true;
+            if (_dislikeService.GetByPostAndUser(User.Identity.Name, post.Id) != null) ViewData["disliked"] = true;
             else ViewData["disliked"] = false;
 
             List<PostReplyViewModel> replyViews = new List<PostReplyViewModel>();

@@ -29,23 +29,22 @@
                             @Html.DisplayFor(m => r.ContentReply)
                         </div>
                         <div class="col-2 text-light">
-                            <button class="btn btn-outline-light text-light m-1" onclick="SubmitLikeOnReply(@r.Id,'@User.Identity.Name')" id="likereply-@r.Id">
+                            <button class="btn btn-outline-light text-light m-1" onclick="SubmitLikeOnReply(@r.PostId, @r.Id,'@User.Identity.Name')" id="likereply-@r.Id">
                                 <i id="likeIcon-@User.Identity.Name" class="fa-regular fa-thumbs-up"></i>
-                                <p class="p-button" id="likesCount-@r.Id">
+                                <p class="p-button" id="likesCount-@r.PostId-@r.Id">
                                     @Html.DisplayFor(m => r.LikesCount)
                                 </p>
                             </button>
 
-                            <button class="btn btn-outline-light text-light m-1" onclick="SubmitDislikeOnReply(@r.Id,'@User.Identity.Name')" id="dislikereply-@r.Id">
+                            <button class="btn btn-outline-light text-light m-1" onclick="SubmitDislikeOnReply(@r.PostId, @r.Id,'@User.Identity.Name')" id="dislikereply-@r.Id">
                                 <i id="dislikeIcon-@User.Identity.Name" class="fa-regular fa-thumbs-down"></i>
-                                <p class="p-button" id="dislikesCount-@r.Id">
+                                <p class="p-button" id="dislikesCount-@r.PostId-@r.Id">
                                     @Html.DisplayFor(m => r.DislikesCount)
                                 </p>
                             </button>
                             <button class=" btn btn-outline-light text-light m-1" onclick="AreaForReplyToReply(@r.Id)"> <i class="fa-regular fa-comment"></i> </button>
                         </div>
                     </div>
-                    
                     
                     @Html.Partial("~/Views/PostReply/_ReplyToReplyFormPartial.cshtml", (int)r.Id)
 

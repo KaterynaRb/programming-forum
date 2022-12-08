@@ -23,21 +23,29 @@ namespace BLL.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(string userId, int itemId)
+        public async Task DeleteOnPost(string userId, int postId)
         {
-            Like like = await _context.Likes.FindAsync(userId, itemId);
+            Like like = _context.Likes.Where(l => l.UserId == userId && l.PostId == postId).FirstOrDefault();
+            _context.Likes.Remove(like);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteOnPostReply(string userId, int postReplyId)
+        {
+            Like like = _context.Likes.Where(l => l.UserId == userId && l.PostReplyId == postReplyId).FirstOrDefault();
             _context.Likes.Remove(like);
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Like> GetAll()
+        public Like GetByPostAndUser(string userId, int postId)
         {
-            throw new NotImplementedException();
+            Like like = _context.Likes.Where(l => l.UserId == userId).Where(l => l.PostId == postId).FirstOrDefault();
+            return like;
         }
 
-        public Like GetById(string userId, int itemId)
+        public Like GetByPostReplyAndUser(string userId, int postReplyId)
         {
-            return _context.Likes.Find(userId, itemId);
+            Like like = _context.Likes.Where(l => l.UserId == userId).Where(l => l.PostReplyId == postReplyId).FirstOrDefault();
+            return like;
         }
     }
 }

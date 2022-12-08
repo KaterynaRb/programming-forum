@@ -80,7 +80,7 @@ namespace DAL
 
             modelBuilder.Entity<Like>(b =>
             {
-                b.HasKey(l => new {l.UserId, l.PostId});
+                b.HasKey(l => l.Id);
 
                 b.HasOne(e => e.User)
                     .WithMany(e => e.Likes)
@@ -91,7 +91,6 @@ namespace DAL
                 b.HasOne(e => e.Post)
                     .WithMany(e => e.Likes)
                     .HasForeignKey(p => p.PostId)
-                    .IsRequired()
                     .OnDelete(DeleteBehavior.ClientCascade);
 
                 b.HasOne(e => e.PostReply)
@@ -102,7 +101,7 @@ namespace DAL
 
             modelBuilder.Entity<Dislike>(b =>
             {
-                b.HasKey(d => new { d.UserId, d.PostId });
+                b.HasKey(d => d.Id);
 
                 b.HasOne(e => e.User)
                     .WithMany(e => e.Dislikes)
@@ -113,7 +112,6 @@ namespace DAL
                 b.HasOne(e => e.Post)
                     .WithMany(e => e.Dislikes)
                     .HasForeignKey(p => p.PostId)
-                    .IsRequired()
                     .OnDelete(DeleteBehavior.ClientCascade);
 
                 b.HasOne(e => e.PostReply)
