@@ -1,6 +1,16 @@
 ﻿@using ProgrammingForum_ASPNETCore.Models.PostReplyModels
 @model IEnumerable<ProgrammingForum_ASPNETCore.Models.PostReplyModels.PostReplyViewModel>
 
+@{
+    var likedReply = "fa-regular";
+    //if ((bool)ViewData["likedReply"]) likedReply = "fa-solid";
+    var repliesLiked = ViewBag.RepliesLiked as Dictionary<int, bool>;
+
+    var dislikedReply = "fa-regular";
+    //if ((bool)ViewData["disliked"]) dislikedReply = "fa-solid";
+    var repliesDisliked = ViewBag.RepliesDisliked as Dictionary<int, bool>;
+
+}
 
 @{
     void ShowReplies(IEnumerable<PostReplyViewModel> replies)
@@ -8,6 +18,9 @@
         <ul>
             @foreach (var r in replies)
             {
+                if ((bool)repliesLiked[r.Id]) likedReply = "fa-solid";
+                if ((bool)repliesDisliked[r.Id]) dislikedReply = "fa-solid";
+
                 <li class="text-light reply my-3">
                     <div class="row">
                         <div class="col-3 text-light">
@@ -30,14 +43,14 @@
                         </div>
                         <div class="col-2 text-light">
                             <button class="btn btn-outline-light text-light m-1" onclick="SubmitLikeOnReply(@r.PostId, @r.Id,'@User.Identity.Name')" id="likereply-@r.Id">
-                                <i id="likeIcon-@User.Identity.Name" class="fa-regular fa-thumbs-up"></i>
+                                <i id="likeIconReply-@r.Id-@User.Identity.Name" class="@likedReply fa-thumbs-up"></i>
                                 <p class="p-button" id="likesCount-@r.PostId-@r.Id">
                                     @Html.DisplayFor(m => r.LikesCount)
                                 </p>
                             </button>
 
                             <button class="btn btn-outline-light text-light m-1" onclick="SubmitDislikeOnReply(@r.PostId, @r.Id,'@User.Identity.Name')" id="dislikereply-@r.Id">
-                                <i id="dislikeIcon-@User.Identity.Name" class="fa-regular fa-thumbs-down"></i>
+                                <i id="dislikeIconReply-@r.Id-@User.Identity.Name" class="@dislikedReply fa-thumbs-down"></i>
                                 <p class="p-button" id="dislikesCount-@r.PostId-@r.Id">
                                     @Html.DisplayFor(m => r.DislikesCount)
                                 </p>

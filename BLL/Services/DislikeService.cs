@@ -24,7 +24,7 @@ namespace BLL.Services
 
         public async Task DeleteOnPost(string userId, int postId)
         {
-            Dislike dislike = _context.Dislikes.Where(l => l.UserId == userId && l.PostId == postId).FirstOrDefault();
+            Dislike dislike = _context.Dislikes.Where(l => l.UserId == userId && l.PostId == postId && l.PostReplyId == null).FirstOrDefault();
             _context.Dislikes.Remove(dislike);
             await _context.SaveChangesAsync();
         }
@@ -37,7 +37,7 @@ namespace BLL.Services
 
         public Dislike GetByPostAndUser(string userId, int postId)
         {
-            Dislike dislike = _context.Dislikes.Where(l => l.UserId == userId && l.PostId == postId).FirstOrDefault();
+            Dislike dislike = _context.Dislikes.Where(l => l.UserId == userId && l.PostId == postId && l.PostReplyId == null).FirstOrDefault();
             return dislike;
         }
         public Dislike GetByPostReplyAndUser(string userId, int postReplyId)

@@ -12,6 +12,6 @@ namespace DAL.Entities
         public string Name { get; set; }
         public byte[]? Image { get; set; }
         public string? Chapter { get; set; }
-        public virtual IEnumerable<Post> Posts { get; set; }
+        public virtual IEnumerable<Post>? Posts { get; set; }
     }
 }

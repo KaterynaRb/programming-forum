@@ -73,6 +73,17 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                     var repView = _mapper.Map<PostReplyViewModel>(r);
                     replyViews.Add(repView);
                 }
+
+                Dictionary<int, bool> repliesLiked = new Dictionary<int, bool>();
+                Dictionary<int, bool> repliesDisliked = new Dictionary<int, bool>();
+                if (_likeService.GetByPostReplyAndUser(User.Identity.Name, r.Id) != null) repliesLiked.Add(r.Id, true);
+                else repliesLiked.Add(r.Id, false);
+
+                if (_dislikeService.GetByPostReplyAndUser(User.Identity.Name, r.Id) != null) repliesDisliked.Add(r.Id, true);
+                else repliesDisliked.Add(r.Id, false);
+
+                ViewBag.RepliesLiked = repliesLiked;
+                ViewBag.RepliesDisliked = repliesDisliked;
             }
             postView.PostReplies = replyViews;
             return View(postView);

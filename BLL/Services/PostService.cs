@@ -41,12 +41,12 @@ namespace BLL.Services
 
         public int GetDislikesCount(int id)
         {
-            return _context.Dislikes.Where(p => p.PostId == id).Count();
+            return _context.Dislikes.Where(l => l.PostId == id && l.PostReplyId == null).Count();
         }
 
         public int GetLikesCount(int id)
         {
-            return _context.Likes.Where(p => p.PostId == id).Count();
+            return _context.Likes.Where(l => l.PostId == id && l.PostReplyId == null).Count();
         }
 
         public IEnumerable<Post> GetPostsByTopic(int id, int pageNumber, int pageSize)
@@ -117,14 +117,14 @@ namespace BLL.Services
         public async Task UpdateDislikesCount(int postId, int value)
         {
             Post post = await _context.Posts.FindAsync(postId);
-            post.DislikesCount += value;
+            post.DislikesCount = value;
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateLikesCount(int postId, int value)
         {
             Post post = await _context.Posts.FindAsync(postId);
-            post.LikesCount += value;
+            post.LikesCount = value;
             await _context.SaveChangesAsync();
         }
 

@@ -11,6 +11,8 @@ namespace BLL
     {
         Like GetByPostAndUser(string userId, int postId);
         Like GetByPostReplyAndUser(string userId, int postReplyId);
+
+
         Task Add(Like like);
         Task DeleteOnPost(string userId, int postId);
         Task DeleteOnPostReply(string userId, int postReplyId);

@@ -25,7 +25,7 @@ namespace BLL.Services
 
         public async Task DeleteOnPost(string userId, int postId)
         {
-            Like like = _context.Likes.Where(l => l.UserId == userId && l.PostId == postId).FirstOrDefault();
+            Like like = _context.Likes.Where(l => l.UserId == userId && l.PostId == postId && l.PostReplyId == null).FirstOrDefault();
             _context.Likes.Remove(like);
             await _context.SaveChangesAsync();
         }
@@ -38,13 +38,13 @@ namespace BLL.Services
 
         public Like GetByPostAndUser(string userId, int postId)
         {
-            Like like = _context.Likes.Where(l => l.UserId == userId).Where(l => l.PostId == postId).FirstOrDefault();
+            Like like = _context.Likes.Where(l => l.UserId == userId && l.PostId == postId && l.PostReplyId == null).FirstOrDefault();
             return like;
         }
 
         public Like GetByPostReplyAndUser(string userId, int postReplyId)
         {
-            Like like = _context.Likes.Where(l => l.UserId == userId).Where(l => l.PostReplyId == postReplyId).FirstOrDefault();
+            Like like = _context.Likes.Where(l => l.UserId == userId && l.PostReplyId == postReplyId).FirstOrDefault();
             return like;
         }
     }

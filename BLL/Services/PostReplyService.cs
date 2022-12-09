@@ -50,6 +50,30 @@ namespace BLL.Services
             return _context.PostReplies.Where(pr => pr.PostId == id).AsEnumerable();
         }
 
+        public int GetDislikesCount(int id)
+        {
+            return _context.Dislikes.Where(p => p.PostReplyId == id).Count();
+        }
+
+        public int GetLikesCount(int id)
+        {
+            return _context.Likes.Where(p => p.PostReplyId == id).Count();
+        }
+
+        public async Task UpdateDislikesCount(int postReplyId, int value)
+        {
+            PostReply postReply = await _context.PostReplies.FindAsync(postReplyId);
+            postReply.DislikesCount = value;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateLikesCount(int postReplyId, int value)
+        {
+            PostReply postReply = await _context.PostReplies.FindAsync(postReplyId);
+            postReply.LikesCount = value;
+            await _context.SaveChangesAsync();
+        }
+
         public Task UpdateReplyContent(int id, string newContent)
         {
             throw new NotImplementedException();
