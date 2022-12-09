@@ -91,10 +91,10 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
 
         [Authorize]
-        public async Task/*<IActionResult>*/ Logout()
+        public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            //return Redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:44350");
+            return RedirectToAction("Index", "Home");
         }
 
 
@@ -150,7 +150,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                 usermap.HashedPassword = hashed;
                 usermap.PasswordSalt = salt;
 
-                await _userService.Add(usermap);
+                usermap = await _userService.Add(usermap);
 
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Name, usermap.UserName));

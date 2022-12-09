@@ -16,9 +16,11 @@ namespace BLL.Services
             _api = new Client("http://localhost:54962", new HttpClient());
         }
 
-        public async Task Add(Post post)
+        public async Task<Post> Add(Post post)
         {
-            await _api.PostPOSTAsync(post);
+            //await _api.PostPOSTAsync(post);
+            return await _api.PostPOSTAsync(post);
+
             //_context.Posts.Add(post);
             //await _context.SaveChangesAsync();
         }

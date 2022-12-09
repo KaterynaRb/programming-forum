@@ -22,13 +22,13 @@ namespace BLL.Services
             _context = context;
             _api = new Client("http://localhost:54962", new HttpClient());
         }
-        public async Task Add(User user)
+        public async Task<User> Add(User user)
         {
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            await _api.UserPOSTAsync(user);
+            return await _api.UserPOSTAsync(user);
         }
 
         public async Task Delete(string id)

@@ -11,7 +11,7 @@ namespace BLL
     {
         Task<Topic> GetById(int id);
         Task<IEnumerable<Topic>> GetAll();
-        Task Add(Topic topic);
+        Task<Topic> Add(Topic topic);
         Task Delete(int id);
         Task UpdateTopic(int id, Topic topic);
     }

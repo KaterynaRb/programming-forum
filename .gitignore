@@ -348,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# SignalR library
+ProgrammingForum_ASPNETCore/wwwroot/js/signalr/

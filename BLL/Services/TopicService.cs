@@ -23,9 +23,9 @@ namespace BLL.Services
             _api = new Client("http://localhost:54962", new HttpClient());
         }
 
-        public async Task Add(Topic topic)
+        public async Task<Topic> Add(Topic topic)
         {
-            await _api.TopicPOSTAsync(topic);
+            return await _api.TopicPOSTAsync(topic);
         }
 
         public async Task Delete(int id)

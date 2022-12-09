@@ -21,7 +21,7 @@ namespace BLL
         IEnumerable<Post> GetPostsInTopicSearch(int id, string searchString);
         IEnumerable<Post> GetPostsInTopicSearch(int id, string searchString, int pageNumber, int pageSize);
 
-        Task Add(Post post);
+        Task<Post> Add(Post post);
         Task UpdateLikesCount(int postId, int value);
         Task UpdateDislikesCount(int postId, int value);
 

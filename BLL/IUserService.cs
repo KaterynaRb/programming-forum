@@ -14,7 +14,7 @@ namespace BLL
 
         Task<User> GetByIdAndEmail(string id, string email);
 
-        Task Add(User user);
+        Task<User> Add(User user);
         Task Delete(string id);
         Task Update(string id, User user);
     }

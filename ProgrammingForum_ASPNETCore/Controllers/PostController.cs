@@ -46,7 +46,7 @@ namespace ProgrammingForum_ASPNETCore.Controllers
             postModel.AuthorName = User.Identity.Name;
 
             var post = _mapper.Map<Post>(postModel);
-            await _postService.Add(post);
+            post = await _postService.Add(post);
 
             int postId = post.Id;
             return RedirectToAction("ReadPost", new {id = postId});
