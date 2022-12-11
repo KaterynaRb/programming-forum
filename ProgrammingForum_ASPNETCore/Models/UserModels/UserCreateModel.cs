@@ -5,15 +5,15 @@ namespace ProgrammingForum_ASPNETCore.Models.UserModels
 {
     public class UserCreateModel
     {
+        public byte[]? Picture { get; set; }
+
         [Required]
         [StringLength(50, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 2)]
         [Display(Name = "Username")]
         public string UserName { get; set; }
 
-        [Display(Name = "Picture")]
-        public byte[]? Picture { get; set; }
-
         [Required]
+        [StringLength(50, ErrorMessage = "{0} length must be more then {2}.", MinimumLength = 6)]
         public string Password { get; set; }
 
         [Required]

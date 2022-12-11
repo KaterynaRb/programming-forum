@@ -106,26 +106,16 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserCreateModel userCreate, IFormFile file)
         {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
                 if (file != null)
                 {
-                    string extension = Path.GetExtension(file.FileName);
-                    List<string> extensions = new List<string>() { ".png", ".jpg", ".jpeg" };
-
-                    if (extensions.Contains(extension))
+                    using (var ms = new MemoryStream())
                     {
-                        using (var ms = new MemoryStream())
-                        {
-                            file.CopyTo(ms);
-                            var fileBytes = ms.ToArray();
-                            userCreate.Picture = fileBytes;
-                        }
-                    }
-                    else
-                    {
-                        ViewBag.ImageError = "Error: File extensions can be '.png', '.jpg', '.jpeg' ";
-                        return View();
+                        file.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        userCreate.Picture = fileBytes;
                     }
                 }
 

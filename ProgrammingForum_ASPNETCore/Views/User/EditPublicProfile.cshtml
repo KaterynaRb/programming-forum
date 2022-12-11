@@ -1,0 +1,76 @@
+﻿@model ProgrammingForum_ASPNETCore.Models.UserModels.UserEditModel
+
+<hr />
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-3 text-light py-3">
+            @await Html.PartialAsync("~/Views/User/_EditUserMenu.cshtml")
+        </div>
+        <div class="col-3 offset-1 text-light py-3" id="edit-name">
+            <div class="text-center">
+                @using (Html.BeginForm("EditPublicProfile", "User", FormMethod.Post))
+                {
+                    <div class="form-horizontal">
+
+                        <p class="red">@ViewBag.UserExists</p>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @placeholder="Username" } })
+                                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12 pt-2">
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder="Email"} })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                <hr />
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <input type="submit" value="Edit account" class="btn btn-secondary" />
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="col-3 offset-1 text-light py-3" id="edit-picture">
+            @using (Html.BeginForm("EditPicture", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-group">
+                    <div class="col-md-12 pt-2">
+                        @{
+                            if (Model.Picture != null)
+                            {
+                                string imageBase64 = Convert.ToBase64String(Model.Picture);
+                                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                                <img src="@imageSrc" width="100" height="100" />
+                            }
+                        }
+                        <label class="text-light"> Change picture </label>
+                        <input type="file" accept="image/png, image/jpg, image/gif, image/jpeg" name="File" />
+                        @*<label class="text-light" for="inputTag">
+                    Change picture
+                    <i class="fa fa-2x fa-camera"></i>
+                    <input id="inputTag" accept="image/png, image/jpg, image/gif, image/jpeg" name="File" type="file" />
+                    <br />
+                    <span id="imageName"></span>
+                    </label>*@
+                    </div>
+                </div>
+
+                <hr />
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <input type="submit" value="Change picture" class="btn btn-secondary" />
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

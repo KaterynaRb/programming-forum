@@ -8,7 +8,7 @@
                 </button>
                 <div class="dropdown-menu menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item text-light" asp-controller="User" asp-action="UserPage"> View profile</a>
-                    <a class="dropdown-item text-light" asp-controller="User" asp-action="EditUser"> Edit profile</a>
+                    <a class="dropdown-item text-light" asp-controller="User" asp-action="EditPublicProfile" asp-route-id="@User.Identity.Name"> Edit profile</a>
                 </div>
             </div>
         </li>

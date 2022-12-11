@@ -43,6 +43,11 @@ namespace BLL.Services
             return await _api.TopicGETAsync(id);
         }
 
+        public async Task<Topic> GetByName(string name)
+        {
+            return await _context.Topics.Where(t => t.Name == name).FirstOrDefaultAsync();
+        }
+
         public async Task UpdateTopic(int id, Topic topic)
         {
             await _api.TopicPUTAsync(id, topic);

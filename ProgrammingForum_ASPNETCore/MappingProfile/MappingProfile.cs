@@ -15,7 +15,11 @@ namespace ProgrammingForum_ASPNETCore.MappingProfile
 
             CreateMap<User, UserViewModel>().ReverseMap();
 
+            CreateMap<User, UserEditModel>().ReverseMap();
+
             CreateMap<Topic, TopicViewModel>().ReverseMap();
+
+            CreateMap<Topic, TopicCreateModel>().ReverseMap();
 
             CreateMap<Post, PostListingModel>()
                 .ForMember(
@@ -37,7 +41,8 @@ namespace ProgrammingForum_ASPNETCore.MappingProfile
             CreateMap<Post, PostCreateModel>()
                 .ForMember(
                 dest => dest.AuthorName,
-                opt => opt.MapFrom(src => src.UserId)).ReverseMap();
+                opt => opt.MapFrom(src => src.UserId))
+                .ReverseMap();
 
             CreateMap<PostViewModel, PostCreateModel>().ReverseMap();
 

@@ -10,6 +10,7 @@ namespace BLL
     public interface ITopicService
     {
         Task<Topic> GetById(int id);
+        Task<Topic> GetByName(string name);
         Task<IEnumerable<Topic>> GetAll();
         Task<Topic> Add(Topic topic);
         Task Delete(int id);

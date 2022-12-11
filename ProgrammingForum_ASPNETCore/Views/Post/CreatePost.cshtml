@@ -1,8 +1,5 @@
 ﻿@model ProgrammingForum_ASPNETCore.Models.PostModels.PostCreateModel
 
-<div class="text-center">
-    <h2> Create post </h2>
-</div>
 <hr />
 
 <div class="d-flex justify-content-center">
@@ -30,6 +27,7 @@
                 <hr />
                 <div class="form-group">
                     <div class="col-md-offset-2">
+                        @Html.DropDownListFor(m => m.TopicId, Model.TopicOptions, "Select topic")
                         <p>@ViewBag.Message</p>
                         <input type="submit" value="Create post" class="btn btn-secondary" />
                     </div>

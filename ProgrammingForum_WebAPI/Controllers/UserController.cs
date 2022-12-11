@@ -32,7 +32,13 @@ namespace ProgrammingForum_WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> Get(string id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Include(user => user.Posts)
+                //.ThenInclude(user => user.PostReplies)
+                .Include(user => user.PostReplies)
+                .Include(user => user.Likes)
+                .Include(user => user.Dislikes)
+                .Where(user => user.UserName == id)
+                .FirstOrDefaultAsync();
             if (user == null)
             {
                 return NotFound();

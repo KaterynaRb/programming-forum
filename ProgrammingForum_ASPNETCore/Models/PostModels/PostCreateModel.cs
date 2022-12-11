@@ -1,4 +1,5 @@
 ﻿using DAL.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProgrammingForum_ASPNETCore.Models.PostModels
@@ -16,7 +17,9 @@ namespace ProgrammingForum_ASPNETCore.Models.PostModels
         public string Content { get; set; }
         public DateTime CreatedDate { get; set; }
         public string AuthorName { get; set; }
-        public string? Topic { get; set; }
+        //public string? Topic { get; set; }
+        public int? TopicId { get; set; }
+        public SelectList TopicOptions { get; set; }
 
         public PostCreateModel()
         {

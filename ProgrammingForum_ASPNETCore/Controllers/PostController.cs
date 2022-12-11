@@ -4,9 +4,11 @@ using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Hosting;
 using ProgrammingForum_ASPNETCore.Models.PostModels;
 using ProgrammingForum_ASPNETCore.Models.PostReplyModels;
+using ProgrammingForum_ASPNETCore.Models.TopicModels;
 
 namespace ProgrammingForum_ASPNETCore.Controllers
 {
@@ -17,22 +19,36 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         private readonly IPostReplyService _postReplyService;
         private readonly ILikeService _likeService;
         private readonly IDislikeService _dislikeService;
+        private readonly ITopicService _topicService;
 
         public PostController(IMapper mapper, IPostService postService,
-            IPostReplyService postReplyService, ILikeService likeService, IDislikeService dislikeService)
+            IPostReplyService postReplyService, ILikeService likeService,
+            IDislikeService dislikeService, ITopicService topicService)
         {
             _mapper = mapper;
             _postService = postService;
             _postReplyService = postReplyService;
             _likeService = likeService;
             _dislikeService = dislikeService;
+            _topicService = topicService;
         }
 
         [Authorize]
-        public IActionResult CreatePost()
+        public async Task<IActionResult> CreatePost()
         {
             ViewBag.Message = "";
-            return View();
+
+            var topics = await _topicService.GetAll();
+            var topicViews = _mapper.Map<IEnumerable<TopicViewModel>>(topics);
+            var dictionary = new Dictionary<int, string>();
+            foreach (var topicView in topicViews)
+            {
+                dictionary.Add(topicView.Id, topicView.Name);
+            }
+            PostCreateModel postModel = new PostCreateModel();
+            postModel.TopicOptions = new SelectList(dictionary, "Key", "Value");
+
+            return View(postModel);
         }
 
         [HttpPost]

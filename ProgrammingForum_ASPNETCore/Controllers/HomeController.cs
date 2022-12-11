@@ -22,12 +22,9 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var t =  await _topicService.GetAll();
-
-            //IEnumerable<Topic> topics = await _topicService.GetAll();
-            //var topicViews = _mapper.Map<IEnumerable<TopicViewModel>>(topics);
-            //return View(topicViews);
-            return View();
+            IEnumerable<Topic> topics = await _topicService.GetAll();
+            var topicViews = _mapper.Map<IEnumerable<TopicViewModel>>(topics);
+            return View(topicViews);
         }
 
 

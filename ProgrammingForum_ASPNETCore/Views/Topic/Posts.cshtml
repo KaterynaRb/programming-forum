@@ -4,7 +4,7 @@
     <div class="text-center col-8">
         <form asp-action="Posts" method="get">
             <div class="input-group">
-                <label class="text-light my-auto mx-3"> Find post in topic (): </label>
+                <label class="text-light my-auto mx-3"> Find post in topic: @ViewBag.Topic: </label>
                 <input type="text" name="SearchString" class="input-search form-control" placeholder="Search for..." value="@ViewData["CurrentFilter"]" />
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-default navbar-btn"> <i class="fa-solid fa-magnifying-glass text-light"></i> </button>

@@ -1,0 +1,47 @@
+﻿@model ProgrammingForum_ASPNETCore.Models.TopicModels.TopicCreateModel
+
+<div class="text-center text-light">
+    <h2> Create Topic </h2>
+</div>
+<hr />
+
+<div class="d-flex justify-content-center">
+    <div class="text-center">
+        @using (Html.BeginForm("Create", "Topic", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-horizontal text-light">
+
+                <p>@ViewBag.TopicExists</p>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder="Title" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 pt-2">
+                        <label class="text-light"> Add image </label>
+                        <input type="file" accept="image/png, image/jpg, image/gif, image/jpeg" name="File" />
+                        @*<label class="text-light" for="inputTag">
+                    Add image
+                    <i class="fa fa-2x fa-camera"></i>
+                    <input id="inputTag" accept="image/png, image/jpg, image/gif, image/jpeg" name="File" type="file" />
+                    <br />
+                    <span id="imageName"></span>
+                    </label>*@
+                    </div>
+                </div>
+
+                <hr />
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <p>@ViewBag.ImageError</p>
+                        <input type="submit" value="Create topic" class="btn btn-secondary" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

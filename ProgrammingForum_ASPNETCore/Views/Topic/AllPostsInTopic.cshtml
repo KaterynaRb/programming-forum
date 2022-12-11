@@ -4,12 +4,12 @@
     ViewData["Title"] = "AllPosts";
 }
 
-<div class="text-center">
-    <h1>AllPosts</h1>
-    <h2>Topic</h2>
+<div class="text-center text-light">
+    <h2>All Posts</h2>
+    <h3> @ViewBag.Topic</h3>
 </div>
 
-<table class="table">
+<table class="table text-light">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Description)

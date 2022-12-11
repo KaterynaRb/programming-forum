@@ -13,21 +13,7 @@ namespace ProgrammingForum_ASPNETCore.Models.UserModels
         public byte[]? Picture { get; set; }
 
         [Required]
-        public string Password { get; set; }
-
-        [Required]
-        [Compare(nameof(Password), ErrorMessage = "Passwords don't match.")]
-        [Display(Name = "Confirm password")]
-        public string ConfirmPassword { get; set; }
-
-        [Required]
         [EmailAddress(ErrorMessage = "Email is not valid.")]
         public string Email { get; set; }
-
-        [Required]
-        [EmailAddress(ErrorMessage = "Email is not valid.")]
-        [Compare(nameof(Email), ErrorMessage = "Emails don't match.")]
-        [Display(Name = "Confirm email")]
-        public string ConfirmEmail { get; set; }
     }
 }

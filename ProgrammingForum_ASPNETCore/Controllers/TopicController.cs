@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL;
+using BLL.Services;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,43 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> Create(TopicCreateModel topicCreateModel, IFormFile file)
+        {
+            if (ModelState.IsValid)
+            {
+                if (file != null)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        file.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        topicCreateModel.Image = fileBytes;
+                    }
+                }
+
+                var findTopic = await _topicService.GetByName(topicCreateModel.Name);
+                if (findTopic != null)
+                {
+                    ViewBag.TopicExists = "Topic with this title already exists";
+                    return View(topicCreateModel);
+                }
+
+                Topic topic = _mapper.Map<Topic>(topicCreateModel);
+                _topicService.Add(topic);
+
+                return RedirectToAction("AllTopics");
+            }
+            return View(topicCreateModel);
+        }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllTopics()
         {
             IEnumerable<Topic> topics = await _topicService.GetAll();
@@ -30,13 +68,14 @@ namespace ProgrammingForum_ASPNETCore.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult AllPostsInTopic(int id)
+        public async Task<IActionResult> AllPostsInTopic(int id)
         {
             IEnumerable<Post> postsInTopic = _postService.GetPostsByTopic(id);
             var postViews = _mapper.Map<IEnumerable<PostViewModel>>(postsInTopic);
+            Topic topic = await _topicService.GetById(id);
+            ViewBag.Topic = topic.Name;
             return View(postViews);
         }
-        
 
         public async Task<IActionResult> Posts(int id, string searchString, int? page)
         {
@@ -64,7 +103,6 @@ namespace ProgrammingForum_ASPNETCore.Controllers
                 totalPages = (int)Math.Ceiling(allposts.Count() / (double)pageSize);
             }
 
-
             ViewData["prevDisabled"] = !(pageNumber > 1) ? "disabled" : "";
             ViewData["nextDisabled"] = !(pageNumber < totalPages) ? "disabled" : "";
 
@@ -73,12 +111,16 @@ namespace ProgrammingForum_ASPNETCore.Controllers
 
             var postListings = _mapper.Map<IEnumerable<PostListingModel>>(posts);
 
+            Topic topic = await _topicService.GetById(id);
+            ViewBag.Topic = topic.Name;
             return View(postListings);
         }
 
-        public IActionResult Index()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            await _topicService.Delete(id);
+            return RedirectToAction("AllTopics");
         }
     }
 }

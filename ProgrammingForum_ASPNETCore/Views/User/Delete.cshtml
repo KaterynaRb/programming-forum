@@ -1,0 +1,15 @@
+﻿<hr />
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-3 text-light py-3">
+            @await Html.PartialAsync("~/Views/User/_EditUserMenu.cshtml")
+        </div>
+        <div class="col-7 text-light py-3">
+            <p> Are you sure you want to delete your account? It will be impossible to restore the account. All your posts and comments will be deleted </p>
+            <form asp-action="Delete" asp-controller="User" asp-route-id ="@User.Identity.Name">
+                <input class="btn btn-secondary" type="submit" value="Delete account" />
+            </form>
+        </div>
+    </div>
+</div>

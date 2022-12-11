@@ -29,6 +29,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Score)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Score)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Picture)
         </dt>
 
@@ -45,6 +53,11 @@
 
     </dl>
 </div>
+
+<div class="text-center text-light">
+    <h3> My Posts </h3>
+</div>
+<hr />
 
 <div>
     <table class="table text-light">
@@ -79,6 +92,9 @@
                 @Html.DisplayFor(modelItem => item.DislikesCount)
             </td>
             <td>
+                @Html.ActionLink("View", "View", new { id=item.Id })
+            </td>
+            <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id })
             </td>
             <td>
@@ -89,6 +105,11 @@
     </table>
 </div>
 
+
+<div class="text-center text-light">
+    <h3> My Interactions </h3>
+</div>
+<hr />
 
 <div>
     <table class="table text-light">
@@ -121,6 +142,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DislikesCount)
+                </td>
+                <td>
+                    @Html.ActionLink("View", "View", new { id=item.Id })
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id=item.Id })
